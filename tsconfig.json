@@ -1,0 +1,9 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  }
+}
