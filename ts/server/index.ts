@@ -18,8 +18,10 @@ app.get('/serie/:id', async (req, res) => {
 });
 
 app.get('/album/:id', async (req, res) => {
+  console.time('convert series => albums');
   const series = await DataBase.readDb();
   const album = getAlbum(series, req.params.id);
+  console.timeEnd('convert series => albums');
   res.json(album);
 });
 

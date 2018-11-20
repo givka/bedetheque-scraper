@@ -33,8 +33,13 @@ export class DataBase {
   }
 
   static writeDbSync(serie) {
-    const db = this.readDb();
+    console.time('read-write');
+
+    const db = this.readDbSync();
     db[serie.id] = serie;
+
     fs.writeJSONSync('database.json', db);
+
+    console.timeEnd('read-write');
   }
 }

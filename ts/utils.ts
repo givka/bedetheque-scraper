@@ -9,8 +9,6 @@ export class Utils {
 
   static getAlbumsFromSeries(series) {
     const localAlbums = {};
-    console.time('convert series => albums');
-
     Object.keys(series).forEach((serieId) => {
       const serie = series[serieId];
       Object.keys(serie.albums).forEach((albumId) => {
@@ -18,7 +16,6 @@ export class Utils {
         localAlbums[albumId] = album;
       });
     });
-    console.timeEnd('convert series => albums');
     return localAlbums;
   }
 }
