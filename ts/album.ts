@@ -21,13 +21,31 @@ export class Album {
 
   public verso: string;
 
+  public voteAverage : number;
+
+  public voteCount : number;
+
   constructor(page : Cheerio, $: CheerioAPI) {
     this.id = parseInt(page.children().first().attr('name'), 10);
     this.titre = page.find('.album-main .titre').attr('title');
     this.cover = this.findCover(page);
     this.extrait = this.findExtrait(page);
     this.verso = this.findVerso(page);
+    this.voteAverage = this.findVoteAverage(page, $);
+    this.voteCount = this.findVoteCount(page, $);
+
     this.addDetails(page, $);
+  }
+
+  private findVoteAverage(page : Cheerio, $: CheerioAPI) {
+    const voteAverage = page.find('.ratingblock  strong').text();
+    return voteAverage ? parseFloat(voteAverage) : null;
+  }
+
+  private findVoteCount(page : Cheerio, $: CheerioAPI) {
+    if (this.voteAverage === null) { return null; }
+    const voteCount = page.find('.ratingblock p').text();
+    return voteCount ? parseInt(voteCount.match(/\(([0-9]+) vote/)[1], 10) : null;
   }
 
   private addDetails(page, $) {
@@ -43,7 +61,9 @@ export class Album {
       .toLowerCase()
       .replace(' :', '');
 
-    const value = pageInfo.text().split(':')[1].trim();
+    const value = pageInfo.text().split(':')[1]
+      ? pageInfo.text().split(':')[1].trim()
+      : null;
 
     switch (key) {
       case 'scénario':
@@ -70,7 +90,7 @@ export class Album {
   }
 
   private findCover(page) {
-    const cover = page.find('.couv a').attr('href');
+    const cover = page.find('.sous-couv .browse-couvertures').attr('href');
     return cover ? cover.replace('https://www.bedetheque.com/cache/thb_couv/', '')
       .replace('https://www.bedetheque.com/media/Couvertures/', '')
       : null;

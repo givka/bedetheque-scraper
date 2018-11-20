@@ -42,6 +42,9 @@
     "no-nested-ternary": "off",
     "no-bitwise": "off",
     "no-console": "off",
-    "no-use-before-define": "off"
+    "no-use-before-define": "off",
+    "no-restricted-syntax": "off",
+    "no-loop-func": "off",
+    "no-await-in-loop": "off"
   }
 }

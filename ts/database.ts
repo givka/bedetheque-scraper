@@ -1,15 +1,18 @@
 import * as fs from 'fs-extra';
 
 export class DataBase {
-  static readDb() {
-    return fs.readJSON('database.json')
-      .catch(() => {
-        fs.writeJSON('database.json', {});
-        return {};
-      });
+  static async readDb() {
+    try {
+      return fs.readJSON('database.json');
+    } catch (e) {
+      await fs.writeJSON('database.json', {});
+      return {};
+    }
   }
 
-  static writeDb(obj) {
-    fs.writeJSON('database.json', obj);
+  static async writeDb(serie) {
+    const db = await this.readDb();
+    db[serie.id] = serie;
+    fs.writeJSON('database.json', db);
   }
 }

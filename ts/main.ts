@@ -2,16 +2,24 @@ import * as _ from 'lodash';
 import { Proxy } from './proxy';
 import { Scrapper } from './scrapper';
 import { DataBase } from './database';
+import { Message } from './message';
 
 async function main() {
   const db = await DataBase.readDb();
-  const proxy = new Proxy();
 
-  const pages = '0'.split('')
-    .map(letter => Scrapper.getSeriesFromLetter(proxy, letter, db));
+  const letters = '0AB'.split('');
 
-  const allSeries = await Promise.all(pages);
-  const series = allSeries.join().split(',');
+  for (const letter of letters) {
+    const proxy = new Proxy();
+    await proxy.getFreeProxyList(5000);
+
+    const scrapper = new Scrapper();
+    await scrapper.getSeriesFromLetter(proxy, letter, db);
+
+    Message.letterDone(letter);
+  }
+
+  Message.databaseScraped();
 }
 
 main();

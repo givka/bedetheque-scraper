@@ -2,11 +2,17 @@ import { Proxy } from './proxy';
 import { Utils } from './utils';
 import { DataBase } from './database';
 import { Album } from './album';
+import { Message } from './message';
 
 export class Scrapper {
+  private nbrOfSeries: number;
+
+  private seriesDone = 0;
+
   cosntructor() {}
 
-  static async getSeriesFromLetter(proxy: Proxy, letter, db) {
+  public async getSeriesFromLetter(proxy: Proxy, letter, db) {
+    Message.searchingSeriesFromLetter(letter);
     const uri = `https://www.bedetheque.com/bandes_dessinees_${letter}.html`;
     const $: CheerioAPI = await proxy.requestProxy(uri);
 
@@ -16,26 +22,22 @@ export class Scrapper {
       .get()
       .filter(sUri => !db[sUri.match(/serie-([0-9]*)-BD/)[1]]);
 
-    console.log(`There are ${series.length} series to do in letter ${letter}`);
-    return series.map((serieUri, index) => this.getSerie(proxy, serieUri, db, index * 500));
+    this.nbrOfSeries = series.length;
+    Message.foundSeriesFromLetter(series, letter);
+    return Promise.all(series.map((url, index) => this.getSerie(proxy, url, index * 500)));
   }
 
-  static async getSerie(proxy : Proxy, uri, db, sleepTime) {
+  public async getSerie(proxy : Proxy, uri, sleepTime) {
     await Utils.setTimeoutPromise(sleepTime);
-
     const $: CheerioAPI = await proxy.requestProxy(uri);
-    if (!$) { return null; }
-
     const serie = this.getSerieInfo($);
 
-    db[serie.id] = serie;
-
-    DataBase.writeDb(db);
-
+    DataBase.writeDb(serie);
+    Message.serieAdded(++this.seriesDone, this.nbrOfSeries, serie);
     return serie;
   }
 
-  static getSerieInfo($) {
+  private getSerieInfo($) {
     return {
       id: parseInt($('.idbel').text(), 10),
       titre: $('h1 a').text(),
@@ -43,7 +45,7 @@ export class Scrapper {
     };
   }
 
-  static getSerieAlbums($) {
+  private getSerieAlbums($) {
     const albums = {};
     $('.liste-albums > li')
       .each((index, elem) => {
