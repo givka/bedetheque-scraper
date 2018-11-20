@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as rp from 'request-promise';
 import * as cheerio from 'cheerio';
 import * as _ from 'lodash';
-import { Utils } from './utils';
+import { Utils } from '../utils';
 import { Message } from './message';
 
 const transform = function (body) {

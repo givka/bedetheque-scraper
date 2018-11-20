@@ -5,7 +5,7 @@ import { DataBase } from './database';
 import { Message } from './message';
 
 async function main() {
-  const db = await DataBase.readDb();
+  const db = await DataBase.readDbSync();
 
   const letters = '0AB'.split('');
 

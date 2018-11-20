@@ -1,5 +1,5 @@
 import { Proxy } from './proxy';
-import { Utils } from './utils';
+import { Utils } from '../utils';
 import { DataBase } from './database';
 import { Album } from './album';
 import { Message } from './message';
@@ -32,7 +32,7 @@ export class Scrapper {
     const $: CheerioAPI = await proxy.requestProxy(uri);
     const serie = this.getSerieInfo($);
 
-    DataBase.writeDb(serie);
+    DataBase.writeDbSync(serie);
     Message.serieAdded(++this.seriesDone, this.nbrOfSeries, serie);
     return serie;
   }
