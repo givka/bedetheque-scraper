@@ -20,7 +20,11 @@ export class DataBase {
   static async writeDb(serie) {
     const db = await this.readDb();
     db[serie.id] = serie;
-    fs.writeJSON('database.json', db);
+    return fs.writeJSON('database.json', db);
+  }
+
+  static async writeDbSync(db) {
+    return fs.writeJSONSync('database.json', db);
   }
 
   static readDbSync() {
@@ -32,14 +36,10 @@ export class DataBase {
     }
   }
 
-  static writeDbSync(serie) {
+  static writeSeries(db, series) {
     console.time('read-write');
-
-    const db = this.readDbSync();
-    db[serie.id] = serie;
-
+    series.forEach((serie) => { db[serie.id] = serie; });
     fs.writeJSONSync('database.json', db);
-
     console.timeEnd('read-write');
   }
 }

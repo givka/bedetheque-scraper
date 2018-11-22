@@ -2,6 +2,7 @@ import * as express from 'express';
 
 import { Utils } from '../utils';
 import { DataBase } from '../scraper/database';
+import { Scrapper } from '../scraper/scrapper';
 
 const app = express();
 
@@ -17,6 +18,13 @@ app.get('/serie/:id', async (req, res) => {
   res.json(serie);
 });
 
+app.get('/length', async (req, res) => {
+  const series = await DataBase.readDb();
+  const albums = Utils.getAlbumsFromSeries(series);
+  res.send(`<div>Number Series: ${Object.keys(series).length}</div>
+  <div>Number Albums: ${Object.keys(albums).length}</div>`);
+});
+
 app.get('/album/:id', async (req, res) => {
   console.time('convert series => albums');
   const series = await DataBase.readDb();
@@ -25,12 +33,19 @@ app.get('/album/:id', async (req, res) => {
   res.json(album);
 });
 
+app.get('/scrap', (req, res) => {
+  const scrapper = new Scrapper();
+  console.log('haha');
+
+  res.send('Scraping Engine launched');
+});
+
 app.get('/', async (req, res) => {
   const series = await DataBase.readDb();
   res.json(series);
 });
 
-app.listen(3000, () => { console.log('Example app listening on port 3000!'); });
+app.listen(3000, () => { console.log('App listening on port 3000!'); });
 
 function getSerie(series, id) {
   return series[id] || null;

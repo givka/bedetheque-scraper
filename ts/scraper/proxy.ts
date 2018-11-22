@@ -1,27 +1,18 @@
-import * as fs from 'fs';
-import * as rp from 'request-promise';
 import * as cheerio from 'cheerio';
 import * as _ from 'lodash';
-import { Utils } from '../utils';
+import axios from 'axios-https-proxy-fix';
 import { Message } from './message';
 
-const transform = function (body) {
-  return cheerio.load(body);
-};
-
 export class Proxy {
-  proxyList : { url: string,
-                port: string }[];
-
-  constructor() {
-  }
+  private proxyList : { host: string,
+                port: number,
+                }[];
 
   async getFreeProxyList(timeout : number) {
     Message.searchingFreeProxiesList(timeout);
-    this.proxyList = await rp.get(`https://proxyscrape.com/proxies/HTTP_${timeout}ms_Timeout_Proxies.txt`)
-      .then(response => response.trim().split('\r\n')
-        .map(p => ({ url: p.split(':')[0], port: p.split(':')[1] })));
-
+    this.proxyList = await axios.get(`https://proxyscrape.com/proxies/HTTP_${timeout}ms_Timeout_Proxies.txt`)
+      .then(response => response.data.trim().split('\r\n')
+        .map(p => ({ host: p.split(':')[0], port: parseInt(p.split(':')[1], 10) })));
     Message.foundFreeProxiesList(this.proxyList, timeout);
   }
 
@@ -30,17 +21,24 @@ export class Proxy {
     return this.proxyList[indexProxy];
   }
 
-  async requestProxy(url) {
-    const proxy = this.getRandomProxy();
-    const proxiedRequest = rp.defaults({ proxy: `http://${proxy.url}:${proxy.port}` });
+  async requestProxy(url, nbrRetry = 5) {
+    if (nbrRetry === 0) { return null; }
     url = encodeURI(url);
-    try {
-      const request = await proxiedRequest({ url, transform });
-      return request;
-    } catch (error) {
-      Message.retryRequest(url);
-      await Utils.setTimeoutPromise(_.random(2000, 5000));
-      return this.requestProxy(url);
-    }
+    const proxy = this.getRandomProxy();
+    return this.timeoutRequest(60000, axios.get(url, { proxy }))
+      .then((result: any) => cheerio.load(result.data))
+      .catch((error) => {
+        console.log(`${nbrRetry} ${url} ${error.message || error.code || error}`);
+        return this.requestProxy(url, --nbrRetry);
+      });
+  }
+
+  timeoutRequest(ms, promise) {
+    return new Promise(((resolve, reject) => {
+      setTimeout(() => {
+        reject(new Error('timeout'));
+      }, ms);
+      promise.then(resolve, reject);
+    }));
   }
 }

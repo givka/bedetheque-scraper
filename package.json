@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run scraper",
-    "scraper": "ts-node ts/scraper/main.ts",
-    "server": "ts-node ts/server/index.ts"
+    "start": "ts-node ts/server/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +13,7 @@
     "@types/fs-extra": "^5.0.4",
     "@types/lodash": "^4.14.118",
     "@types/rwlock": "^5.0.2",
+    "axios-https-proxy-fix": "^0.17.1",
     "cheerio": "^1.0.0-rc.2",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -23,6 +22,7 @@
     "express": "^4.16.4",
     "fs": "0.0.1-security",
     "fs-extra": "^7.0.0",
+    "http": "0.0.0",
     "lodash": "^4.17.11",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",

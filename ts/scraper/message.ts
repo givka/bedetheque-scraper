@@ -30,4 +30,8 @@ export class Message {
   static serieAdded(seriesDone, nbrOfSeries, serie) {
     console.log(`${seriesDone}/${nbrOfSeries}: added ${serie.titre}, with ${Object.keys(serie.albums).length} albums`);
   }
+
+  static serieFail(seriesDone, nbrOfSeries, url) {
+    console.log(`${seriesDone}/${nbrOfSeries}: fail ${url}`);
+  }
 }

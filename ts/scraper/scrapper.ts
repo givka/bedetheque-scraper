@@ -9,12 +9,32 @@ export class Scrapper {
 
   private seriesDone = 0;
 
-  cosntructor() {}
+  constructor() {
+    this.getAllSeries();
+  }
 
-  public async getSeriesFromLetter(proxy: Proxy, letter, db) {
+  private async getAllSeries() {
+    const db = await DataBase.readDb();
+    const letters = '0ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+    for (const letter of letters) {
+      const proxy = new Proxy();
+      await proxy.getFreeProxyList(5000);
+
+      await this.getSeriesFromLetter(proxy, letter, db);
+
+      Message.letterDone(letter);
+    }
+
+    Message.databaseScraped();
+  }
+
+  private async getSeriesFromLetter(proxy: Proxy, letter, db) {
     Message.searchingSeriesFromLetter(letter);
     const uri = `https://www.bedetheque.com/bandes_dessinees_${letter}.html`;
     const $: CheerioAPI = await proxy.requestProxy(uri);
+
+    if (!$) { return this.getSeriesFromLetter(proxy, letter, db); }
 
     const series = $('.nav-liste li')
       .filter((index, element) => ($(element).find('img').attr('src').includes('France')))
@@ -24,15 +44,22 @@ export class Scrapper {
 
     this.nbrOfSeries = series.length;
     Message.foundSeriesFromLetter(series, letter);
-    return Promise.all(series.map((url, index) => this.getSerie(proxy, url, index * 500)));
+    return Promise.all(series.map((url, index) => this.getSerie(proxy, url, index * 500, db)));
   }
 
-  public async getSerie(proxy : Proxy, uri, sleepTime) {
+  private async getSerie(proxy : Proxy, uri, sleepTime, db) {
     await Utils.setTimeoutPromise(sleepTime);
     const $: CheerioAPI = await proxy.requestProxy(uri);
+    if (!$) {
+      Message.serieFail(++this.seriesDone, this.nbrOfSeries, uri);
+      return null;
+    }
     const serie = this.getSerieInfo($);
 
-    DataBase.writeDbSync(serie);
+    db[serie.id] = serie;
+
+    DataBase.writeDbSync(db);
+
     Message.serieAdded(++this.seriesDone, this.nbrOfSeries, serie);
     return serie;
   }
