@@ -5,6 +5,7 @@ import { DataBase } from '../scraper/database';
 import { Scrapper } from '../scraper/scrapper';
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -45,7 +46,7 @@ app.get('/', async (req, res) => {
   res.json(series);
 });
 
-app.listen(3000, () => { console.log('App listening on port 3000!'); });
+app.listen(PORT, () => { console.log('App listening on port 3000!'); });
 
 function getSerie(series, id) {
   return series[id] || null;
