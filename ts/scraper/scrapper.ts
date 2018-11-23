@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { Proxy } from './proxy';
 import { Utils } from '../utils';
 import { DataBase } from './database';
@@ -5,11 +6,13 @@ import { Album } from './album';
 import { Message } from './message';
 
 export class Scrapper {
-  private nbrOfSeries = 0;
+  public nbrOfSeries = 0;
 
-  private seriesDone = 0;
+  public seriesDone = 0;
 
-  private currentLetter : string;
+  public currentLetter = '?';
+
+  public date = moment();
 
   constructor() {
     this.getAllSeries();
@@ -83,5 +86,13 @@ export class Scrapper {
         albums[album.id] = album;
       });
     return albums;
+  }
+
+  public getDuration() {
+    const now = moment();
+    const then = this.date;
+    const ms = moment(now, 'DD/MM/YYYY HH:mm:ss').diff(moment(then, 'DD/MM/YYYY HH:mm:ss'));
+    const d = moment.duration(ms);
+    return `${Math.floor(d.asHours())}h${moment.utc(ms).format(':mm[m]:ss[s]')}`;
   }
 }

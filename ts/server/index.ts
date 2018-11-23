@@ -1,11 +1,12 @@
 import * as express from 'express';
-
+import * as moment from 'moment';
 import { Utils } from '../utils';
 import { DataBase } from '../scraper/database';
 import { Scrapper } from '../scraper/scrapper';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+let scraper: Scrapper = null;
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -19,11 +20,15 @@ app.get('/serie/:id', async (req, res) => {
   res.json(serie);
 });
 
-app.get('/length', async (req, res) => {
-  const series = await DataBase.readDb('A');
-  const albums = Utils.getAlbumsFromSeries(series);
-  res.send(`<div>Number Series: ${Object.keys(series).length}</div>
-  <div>Number Albums: ${Object.keys(albums).length}</div>`);
+app.get('/status', (req, res) => {
+  if (!scraper) { res.send('Scraping Engine not Running'); return; }
+
+  setInterval(() => {
+    res.write(`<div>${scraper.getDuration()}
+     - Letter ${scraper.currentLetter}
+      - ${scraper.seriesDone}
+       / ${scraper.nbrOfSeries}</div>`);
+  }, 500);
 });
 
 app.get('/album/:id', async (req, res) => {
@@ -35,14 +40,13 @@ app.get('/album/:id', async (req, res) => {
 });
 
 app.get('/scrap', (req, res) => {
-  const scrapper = new Scrapper();
-  console.log('haha');
-
+  scraper = null;
+  scraper = new Scrapper();
   res.send('Scraping Engine launched');
 });
 
 app.get('/', async (req, res) => {
-  const series = await DataBase.readDb('A');
+  const series = await DataBase.readAllDb();
   res.json(series);
 });
 
