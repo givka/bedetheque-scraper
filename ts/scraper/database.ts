@@ -9,22 +9,19 @@ export class DataBase {
   //   this.lock = new ReadWriteLock();
   // }
 
-  static async readDb() {
-    return fs.readJSON('database.json')
+  static async readDb(letter) {
+    const url = `database/${letter}.json`;
+    return fs.readJSON(url)
       .catch(async (e) => {
-        await fs.writeJSON('database.json', {});
+        await fs.writeJSON(url, {})
+          .catch(() => { fs.mkdirSync('database'); });
         return {};
       });
   }
 
-  static async writeDb(serie) {
-    const db = await this.readDb();
-    db[serie.id] = serie;
-    return fs.writeJSON('database.json', db);
-  }
-
-  static async writeDbSync(db) {
-    return fs.writeJSONSync('database.json', db);
+  static async writeDbSync(db, letter) {
+    const url = `database/${letter}.json`;
+    return fs.writeJSONSync(url, db);
   }
 
   static readDbSync() {

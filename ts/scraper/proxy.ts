@@ -28,7 +28,7 @@ export class Proxy {
     return this.timeoutRequest(60000, axios.get(url, { proxy }))
       .then((result: any) => cheerio.load(result.data))
       .catch((error) => {
-        console.log(`${nbrRetry} ${url} ${error.message || error.code || error}`);
+        console.log(`retry ${nbrRetry}: ${url} ${error.message || error.code || error}`);
         return this.requestProxy(url, --nbrRetry);
       });
   }

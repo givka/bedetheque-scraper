@@ -5,19 +5,21 @@ import { Album } from './album';
 import { Message } from './message';
 
 export class Scrapper {
-  private nbrOfSeries: number;
+  private nbrOfSeries = 0;
 
   private seriesDone = 0;
+
+  private currentLetter : string;
 
   constructor() {
     this.getAllSeries();
   }
 
   private async getAllSeries() {
-    const db = await DataBase.readDb();
     const letters = '0ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
     for (const letter of letters) {
+      const db = await DataBase.readDb(letter);
       const proxy = new Proxy();
       await proxy.getFreeProxyList(5000);
 
@@ -42,7 +44,8 @@ export class Scrapper {
       .get()
       .filter(sUri => !db[sUri.match(/serie-([0-9]*)-BD/)[1]]);
 
-    this.nbrOfSeries = series.length;
+    this.nbrOfSeries += series.length;
+    this.currentLetter = letter;
     Message.foundSeriesFromLetter(series, letter);
     return Promise.all(series.map((url, index) => this.getSerie(proxy, url, index * 500, db)));
   }
@@ -58,7 +61,7 @@ export class Scrapper {
 
     db[serie.id] = serie;
 
-    DataBase.writeDbSync(db);
+    DataBase.writeDbSync(db, this.currentLetter);
 
     Message.serieAdded(++this.seriesDone, this.nbrOfSeries, serie);
     return serie;

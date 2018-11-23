@@ -14,13 +14,13 @@ app.use((req, res, next) => {
 });
 
 app.get('/serie/:id', async (req, res) => {
-  const series = await DataBase.readDb();
+  const series = await DataBase.readDb('A');
   const serie = getSerie(series, req.params.id);
   res.json(serie);
 });
 
 app.get('/length', async (req, res) => {
-  const series = await DataBase.readDb();
+  const series = await DataBase.readDb('A');
   const albums = Utils.getAlbumsFromSeries(series);
   res.send(`<div>Number Series: ${Object.keys(series).length}</div>
   <div>Number Albums: ${Object.keys(albums).length}</div>`);
@@ -28,7 +28,7 @@ app.get('/length', async (req, res) => {
 
 app.get('/album/:id', async (req, res) => {
   console.time('convert series => albums');
-  const series = await DataBase.readDb();
+  const series = await DataBase.readDb('A');
   const album = getAlbum(series, req.params.id);
   console.timeEnd('convert series => albums');
   res.json(album);
@@ -42,7 +42,7 @@ app.get('/scrap', (req, res) => {
 });
 
 app.get('/', async (req, res) => {
-  const series = await DataBase.readDb();
+  const series = await DataBase.readDb('A');
   res.json(series);
 });
 
