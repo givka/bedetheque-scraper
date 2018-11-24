@@ -3,16 +3,19 @@ import * as _ from 'lodash';
 import axios from 'axios-https-proxy-fix';
 import { Message } from './message';
 
+export interface ProxyType{
+  host: string;
+  port: number;
+}
+
 export class Proxy {
-  private proxyList : { host: string,
-                port: number,
-                }[];
+  private proxyList!: ProxyType[];
 
   async getFreeProxyList(timeout : number) {
     Message.searchingFreeProxiesList(timeout);
     this.proxyList = await axios.get(`https://proxyscrape.com/proxies/HTTP_${timeout}ms_Timeout_Proxies.txt`)
       .then(response => response.data.trim().split('\r\n')
-        .map(p => ({ host: p.split(':')[0], port: parseInt(p.split(':')[1], 10) })));
+        .map((p: string) => ({ host: p.split(':')[0], port: parseInt(p.split(':')[1], 10) })));
     Message.foundFreeProxiesList(this.proxyList, timeout);
   }
 
@@ -21,7 +24,7 @@ export class Proxy {
     return this.proxyList[indexProxy];
   }
 
-  async requestProxy(url, nbrRetry = 5) {
+  async requestProxy(url: string, nbrRetry = 5): Promise<any> {
     if (nbrRetry === 0) { return null; }
     url = encodeURI(url);
     const proxy = this.getRandomProxy();
@@ -33,7 +36,7 @@ export class Proxy {
       });
   }
 
-  timeoutRequest(ms, promise) {
+  timeoutRequest(ms: number, promise: Promise<any>) {
     return new Promise(((resolve, reject) => {
       setTimeout(() => {
         reject(new Error('timeout'));
