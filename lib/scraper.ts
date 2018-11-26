@@ -52,14 +52,15 @@ export class Scraper {
   private async getSerie(proxy : Proxy, uri: string, sleepTime: number, db: DataBaseType) {
     await Utils.setTimeoutPromise(sleepTime);
     const $: CheerioAPI = await proxy.requestProxy(uri);
+    this.seriesDone += 1;
     if (!$) {
-      Message.serieFail(++this.seriesDone, this.nbrOfSeries, uri);
+      Message.serieFail(this.seriesDone, this.nbrOfSeries, uri);
       return null;
     }
     const serie = new Serie($);
     db[serie.serieId] = serie;
     DataBase.writeDbSync(db);
-    Message.serieAdded(++this.seriesDone, this.nbrOfSeries, serie);
+    Message.serieAdded(this.seriesDone, this.nbrOfSeries, serie);
     return serie;
   }
 
@@ -71,4 +72,3 @@ export class Scraper {
     return `${Math.floor(d.asHours())}h${moment.utc(ms).format(':mm[m]:ss[s]')}`;
   }
 }
-

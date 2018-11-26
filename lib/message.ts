@@ -11,7 +11,8 @@ export class Message {
   }
 
   static foundFreeProxiesList(proxyList: ProxyType[], timeout: number) {
-    console.log(`Found ${proxyList.length} proxies with ${timeout}ms timeout to scrap bedetheque.com`);
+    console.log(`Found ${proxyList.length} proxies with
+    ${timeout}ms timeout to scrap bedetheque.com`);
   }
 
   static foundSeriesFromLetter(seriesUrl: string[], letter: string) {
@@ -23,7 +24,8 @@ export class Message {
   }
 
   static searchingSeriesFromLetter(letter: string) {
-    console.log(`Searching all series beginning with the letter ${letter}\n\rIt can take some time...`);
+    console.log(`Searching all series beginning with the letter
+    ${letter}\n\rIt can take some time...`);
   }
 
   static searchingFreeProxiesList(timeout: number) {
@@ -31,7 +33,8 @@ export class Message {
   }
 
   static serieAdded(seriesDone: number, nbrOfSeries: number, serie: Serie) {
-    console.log(`${seriesDone}/${nbrOfSeries}: added ${serie.serieTitle}, with ${Object.keys(serie.albums).length} albums`);
+    console.log(`${seriesDone}/${nbrOfSeries}: added ${serie.serieTitle},
+    with ${Object.keys(serie.albums).length} albums`);
   }
 
   static serieFail(seriesDone: number, nbrOfSeries: number, url: string) {

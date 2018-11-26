@@ -27,4 +27,3 @@ export class Serie {
     return albums;
   }
 }
-

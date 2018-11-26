@@ -10,7 +10,7 @@ import { Serie } from './serie';
 // }
 
 export interface DataBaseType{
-  [key: number]: Serie
+  [key: number]: Serie;
 }
 
 export class DataBase {
