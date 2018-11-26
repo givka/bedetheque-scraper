@@ -92,7 +92,7 @@ public imageReverse: string | null;
 - [ ] use async fs read / write with lock for no conflict
 
 [npm-image]: https://img.shields.io/npm/v/bedetheque-scraper.svg
-[npm-url]: https://npmjs.org/package/gts
+[npm-url]: https://npmjs.com/package/bedetheque-scraper
 [david-dev-image]: https://david-dm.org/givka/bedetheque-scraper/dev-status.svg
 [david-dev-url]: https://david-dm.org/givka/bedetheque-scraper?type=dev
 [david-image]: https://david-dm.org/givka/bedetheque-scraper.svg
