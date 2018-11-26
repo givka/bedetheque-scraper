@@ -1,13 +1,20 @@
 {
-  "name": "test_web_scraping",
+  "name": "bedetheque-scraper",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "NodeJS script to scrap the entire database of dbgest.com / bedetheque.com (approx. 260.000+ albums)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "start": "ts-node lib/main.ts"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "givka",
+  "email": "givka.dev@gmail.com",
+  "homepage": "https://github.com/owner/project#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/givka/bedetheque-scraper.git"
+  },
+  "license": "MIT",
   "dependencies": {
     "@types/cheerio": "^0.22.9",
     "@types/express": "^4.16.0",
@@ -25,7 +32,6 @@
     "fs-extra": "^7.0.0",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
-    "moment-duration-format": "^2.2.2",
     "rwlock": "^5.0.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",

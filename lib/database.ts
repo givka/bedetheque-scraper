@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import { Serie } from './serie';
 
+// TODO: use async read / write with lock for no conflict;
 // import * as ReadWriteLock from 'rwlock';
 // lock
 
