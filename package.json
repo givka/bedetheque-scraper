@@ -1,6 +1,6 @@
 {
   "name": "bedetheque-scraper",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "NodeJS script to scrap the entire database of dbgest.com / bedetheque.com (approx. 260.000+ albums)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
