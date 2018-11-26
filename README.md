@@ -7,7 +7,9 @@
 
 ## Description
 
-NodeJS script to scrap the entire database of dbgest.com / bedetheque.com (approx. 260.000+ albums)
+NodeJS script to scrap the entire database of [bdgest.com](https://www.bdgest.com/) / [bedetheque.com](https://www.bedetheque.com/).
+
+(approx. 40.000+ series, 260.000+ albums)
 
 ## How it works
 
