@@ -1,4 +1,8 @@
 # bedetheque-scraper
+[![NPM Version][npm-image]][npm-url]
+[![Dependency Status][david-image]][david-url]
+[![devDependency Status][david-dev-image]][david-dev-url]
+
 <img src="https://www.bdgest.com/skin/logo_bdgest_250.png">
 
 ## Description
@@ -84,3 +88,10 @@ public imageReverse: string | null;
 - [ ] scrap serie recommendations
 - [ ] scrap serie popularity
 - [ ] use async fs read / write with lock for no conflict
+
+[npm-image]: https://img.shields.io/npm/v/bedetheque-scraper.svg
+[npm-url]: https://npmjs.org/package/gts
+[david-dev-image]: https://david-dm.org/givka/bedetheque-scraper/dev-status.svg
+[david-dev-url]: https://david-dm.org/givka/bedetheque-scraper?type=dev
+[david-image]: https://david-dm.org/givka/bedetheque-scraper.svg
+[david-url]: https://david-dm.org/givka/bedetheque-scraper
