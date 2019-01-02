@@ -44,6 +44,8 @@ async function launchScraper() {
 
 ## Structure
 ```json
+// 'https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html'
+
 {
   "serie": {
     "serieId": 10739,
