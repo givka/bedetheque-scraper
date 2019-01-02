@@ -10,9 +10,8 @@ NodeJS script to scrap the entire database of [bdgest.com](https://www.bdgest.co
 
 ## How it works
 
-It fetches a free proxy list with low timeout, then procede to scrape all comic series letter by letter from bedetheque.com.
-The DataBase will be written in the folder database/series.json
-It will retry 5 times by serie until the serie is scraped. You can rerun this script after completion to scrape series that were not scraped.
+It fetches a free proxy list with low timeout, then procede to scrape all comic series and albums letter by letter from bedetheque.com.
+It will retry 5 times by serie until the serie and its albums are scraped.
 ## Installation
 
 ```bash
@@ -22,45 +21,112 @@ npm install bedetheque-scraper --save
 ## Basic Usage
 
 ```typescript
-const { Scraper } = require('bedetheque-scraper');
-// or using CommonJS
-import { Scraper } from 'bedetheque-scraper';
+const { ProxyFetcher, Scraper, Message } = require('bedetheque-scraper')
+//or using CommonJS
+import { ProxyFetcher, Scraper, Message } from 'bedetheque-scraper'
 
-const scraper = new Scraper();
+async function launchScraper() {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'.split('');
+  for (const letter of letters) {
+    const proxyList = await ProxyFetcher.getFreeProxyList(5000);
+    const seriesUrl = await Scraper.getSeriesUrlFromLetter(proxyList, letter);
+    const series = seriesUrl.map(async (serieUrl, index) => {
+      const { serie, albums } = await Scraper.getSerie(proxyList, serieUrl, index * 500);
+      console.log({ serie, albums });
+      return { serie, albums };
+    });
+    await Promise.all(series);
+    Message.letterDone(letter);
+  }
+  Message.databaseScraped();
+}
 ```
 
-## DataBase Structure
+## Structure
 ```json
 {
-  "10739": {
+  "serie": {
     "serieId": 10739,
     "serieTitle": "Le roi des mouches",
-    "albums": {
-      "42297": {
-        "serieId": 10739,
-        "albumId": 42297,
-        "albumTitle": "Hallorave",
-        "imageCover": "Couv_42297.jpg",
-        "imageExtract": "roidesmouches01p.jpg",
-        "imageReverse": "Verso_42297.jpg",
-        "voteAverage": 4.4,
-        "voteCount": 65,
-        "scenario": "Pirus, Michel",
-        "drawing": "Mezzo",
-        "colors": "Ruby",
-        "date": "01/2005",
-        "editor": "Albin Michel",
-        "nbrOfPages": 62
-      }, 
-      ...
+    "albumsId": [
+      42297,
+      77882,
+      178960,
+      233719
+    ],
+    "voteAverage": 87.2621359223301,
+    "voteCount": 206
+  },
+  "albums": [
+    {
+      "serieId": 10739,
+      "serieTitle": "Le roi des mouches",
+      "albumId": 42297,
+      "albumTitle": "Hallorave",
+      "imageCover": "Couv_42297.jpg",
+      "imageExtract": "roidesmouches01p.jpg",
+      "imageReverse": "Verso_42297.jpg",
+      "voteAverage": 88,
+      "voteCount": 65,
+      "scenario": "Pirus, Michel",
+      "drawing": "Mezzo",
+      "colors": "Ruby",
+      "date": "01/2005",
+      "editor": "Albin Michel",
+      "nbrOfPages": 62
+    },
+    {
+      "serieId": 10739,
+      "serieTitle": "Le roi des mouches",
+      "albumId": 77882,
+      "albumTitle": "L'origine du monde",
+      "imageCover": "RoiDesMouchesLe2_18092008_213101.jpg",
+      "imageExtract": "AlbroiDesMouchesLe2_18092008_213101.jpg",
+      "imageReverse": "roidesmouches02v_77882.jpg",
+      "voteAverage": 86,
+      "voteCount": 100,
+      "scenario": "Pirus, Michel",
+      "drawing": "Mezzo",
+      "colors": "Ruby",
+      "date": "09/2008",
+      "editor": "Glénat",
+      "nbrOfPages": 62
+    },
+    {
+      "serieId": 10739,
+      "serieTitle": "Le roi des mouches",
+      "albumId": 178960,
+      "albumTitle": "Sourire suivant",
+      "imageCover": "178960_c.jpg",
+      "imageExtract": "178960_pla.jpg",
+      "imageReverse": "Verso_178960.jpg",
+      "voteAverage": 88,
+      "voteCount": 37,
+      "scenario": "Pirus, Michel",
+      "drawing": "Mezzo",
+      "colors": "Ruby",
+      "date": "01/2013",
+      "editor": "Glénat",
+      "nbrOfPages": 62
+    },
+    {
+      "serieId": 10739,
+      "serieTitle": "Le roi des mouches",
+      "albumId": 233719,
+      "albumTitle": "Le Roi des mouches",
+      "imageCover": "Couv_233719.jpg",
+      "imageExtract": "PlancheA_233719.jpg",
+      "imageReverse": null,
+      "voteAverage": 100,
+      "voteCount": 4,
+      "scenario": "Pirus, Michel",
+      "drawing": "Mezzo",
+      "colors": "Ruby",
+      "date": "12/2014",
+      "editor": "Glénat",
+      "nbrOfPages": 186
     }
-  },
-  "3": {  
-    "serieId": 3,
-    "serieTitle": "De Cape et de Crocs",
-    "albums": { ... }
-  },
-  ...
+  ]
 }
 ```
 
