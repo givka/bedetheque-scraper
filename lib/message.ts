@@ -1,5 +1,5 @@
 import { Serie } from './serie';
-import { ProxyType } from './proxy';
+import { ProxyType } from './proxy-fetcher';
 
 export class Message {
   static letterDone(letter: string) {
@@ -11,7 +11,7 @@ export class Message {
   }
 
   static foundFreeProxiesList(proxyList: ProxyType[], timeout: number) {
-    console.log(`Found ${proxyList.length} proxies with
+    console.log(`Found ${proxyList.length} proxies with\
     ${timeout}ms timeout to scrap bedetheque.com`);
   }
 
@@ -24,7 +24,7 @@ export class Message {
   }
 
   static searchingSeriesFromLetter(letter: string) {
-    console.log(`Searching all series beginning with the letter
+    console.log(`Searching all series beginning with the letter\
     ${letter}\n\rIt can take some time...`);
   }
 
@@ -32,12 +32,12 @@ export class Message {
     console.log(`Searching Free Proxy List with ${timeout}ms timeout.`);
   }
 
-  static serieAdded(seriesDone: number, nbrOfSeries: number, serie: Serie) {
-    console.log(`${seriesDone}/${nbrOfSeries}: added ${serie.serieTitle},
-    with ${Object.keys(serie.albums).length} albums`);
+  static serieAdded(serie: Serie) {
+    console.log(`done: ${serie.serieTitle},\
+    with ${serie.albumsId.length} albums`);
   }
 
-  static serieFail(seriesDone: number, nbrOfSeries: number, url: string) {
-    console.log(`${seriesDone}/${nbrOfSeries}: fail ${url}`);
+  static serieFail(url: string) {
+    console.log(`fail: ${url}`);
   }
 }

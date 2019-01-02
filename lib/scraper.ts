@@ -1,74 +1,46 @@
-import moment from 'moment';
-import { Proxy } from './proxy';
+import { ProxyFetcher, ProxyType } from './proxy-fetcher';
 import { Utils } from './utils';
-import { DataBase, DataBaseType } from './database';
 import { Message } from './message';
 import { Serie } from './serie';
+import { Album } from './album';
 
 export class Scraper {
-  public nbrOfSeries = 0;
-
-  public seriesDone = 0;
-
-  public currentLetter = '?';
-
-  public date = moment();
-
-  constructor() {
-    this.getAllSeries();
-  }
-
-  private async getAllSeries() {
-    const letters = '0ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    const db = await DataBase.readDb();
-    for (const letter of letters) {
-      const proxy = new Proxy();
-      await proxy.getFreeProxyList(5000);
-      await this.getSeriesFromLetter(proxy, letter, db);
-      Message.letterDone(letter);
-    }
-    Message.databaseScraped();
-  }
-
-  private async getSeriesFromLetter(proxy: Proxy, letter: string, db: DataBaseType) : Promise<any> {
+  public static async getSeriesUrlFromLetter(proxyList: ProxyType[], letter: string): Promise<any> {
     Message.searchingSeriesFromLetter(letter);
     const uri = `https://www.bedetheque.com/bandes_dessinees_${letter}.html`;
-    const $: CheerioAPI = await proxy.requestProxy(uri);
+    const $: CheerioAPI = await ProxyFetcher.requestProxy(proxyList, uri);
 
-    if (!$) { return this.getSeriesFromLetter(proxy, letter, db); }
+    if (!$) { return this.getSeriesUrlFromLetter(proxyList, letter); }
 
     const series = $('.nav-liste li')
       .filter((index, element) => ($(element).find('img').attr('src').includes('France')))
       .map((index, element) => $(element).find('a').attr('href').replace('.html', '__10000.html'))
-      .get()
-      .filter(sUri => !db[parseInt(sUri.match(/serie-([0-9]*)-BD/)![1], 10)]);
+      .get();
 
-    this.nbrOfSeries += series.length;
-    this.currentLetter = letter;
     Message.foundSeriesFromLetter(series, letter);
-    return Promise.all(series.map((url, index) => this.getSerie(proxy, url, index * 500, db)));
+    return series;
   }
 
-  private async getSerie(proxy : Proxy, uri: string, sleepTime: number, db: DataBaseType) {
+  public static async getSerie(proxyList: ProxyType[], uri: string, sleepTime: number) {
     await Utils.setTimeoutPromise(sleepTime);
-    const $: CheerioAPI = await proxy.requestProxy(uri);
-    this.seriesDone += 1;
+    const $: CheerioAPI = await ProxyFetcher.requestProxy(proxyList, uri);
     if (!$) {
-      Message.serieFail(this.seriesDone, this.nbrOfSeries, uri);
-      return null;
+      Message.serieFail(uri);
+      return { serie: null, albums: null };
     }
     const serie = new Serie($);
-    db[serie.serieId] = serie;
-    DataBase.writeDbSync(db);
-    Message.serieAdded(this.seriesDone, this.nbrOfSeries, serie);
-    return serie;
+    const albums = $('.liste-albums > li')
+    .map((index, elem) => new Album($(elem), $, serie.serieId, serie.serieTitle))
+    .get() as unknown as Album[];
+    serie.addAlbumsInfo(albums);
+    Message.serieAdded(serie);
+    return { serie, albums };
   }
 
-  public getDuration() {
-    const now = moment();
-    const then = this.date;
-    const ms = moment(now, 'DD/MM/YYYY HH:mm:ss').diff(moment(then, 'DD/MM/YYYY HH:mm:ss'));
-    const d = moment.duration(ms);
-    return `${Math.floor(d.asHours())}h${moment.utc(ms).format(':mm[m]:ss[s]')}`;
+  private static raceMultipleRequests(ms: number, promise: Promise<any>) {
+    return new Promise(((resolve, reject) => {
+      setTimeout(() => { reject(new Error('timeout')); }, ms);
+      promise.then(resolve, reject);
+    }));
   }
 }
