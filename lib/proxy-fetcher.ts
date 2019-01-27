@@ -12,7 +12,7 @@ export class ProxyFetcher {
   public static async getFreeProxyList(timeout : number) {
     Message.searchingFreeProxiesList(timeout);
     const list: ProxyType[] = await axiosHttpsProxyFix
-    .get(`https://proxyscrape.com/proxies/HTTP_${timeout}ms_Timeout_Proxies.txt`)
+    .get(`https://proxyscrape.com/api?request=getproxies&proxytype=http&timeout=${timeout}`)
       .then(response => response.data.trim().split('\r\n')
         .map((p: string) => ({ host: p.split(':')[0], port: parseInt(p.split(':')[1], 10) })));
     Message.foundFreeProxiesList(list, timeout);
