@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "ts-node lib/main.ts"
+    "start": "ts-node test.ts",
+    "prepublish": "tsc"
   },
   "keywords": [
     "scraper",

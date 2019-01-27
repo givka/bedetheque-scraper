@@ -5,7 +5,8 @@ import { Serie } from './serie';
 import { Album } from './album';
 
 export class Scraper {
-  public static async getSeriesUrlFromLetter(proxyList: ProxyType[], letter: string): Promise<any> {
+  public static async getSeriesUrlFromLetter(proxyList: ProxyType[], letter: string)
+  : Promise<string[]> {
     Message.searchingSeriesFromLetter(letter);
     const uri = `https://www.bedetheque.com/bandes_dessinees_${letter}.html`;
     const $: CheerioAPI = await ProxyFetcher.requestProxy(proxyList, uri);
