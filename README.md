@@ -50,19 +50,21 @@ async function launchScraper() {
   "serie": {
     "serieId": 10739,
     "serieTitle": "Le roi des mouches",
+    "numberOfAlbums": 3,
     "albumsId": [
       42297,
       77882,
       178960,
-      233719
     ],
-    "voteAverage": 87.2621359223301,
-    "voteCount": 206
+    "voteAverage": 87,
+    "voteCount": 202,
+    "serieCover": "Couv_42297.jpg"
   },
   "albums": [
     {
       "serieId": 10739,
       "serieTitle": "Le roi des mouches",
+      "albumNumber": 1,
       "albumId": 42297,
       "albumTitle": "Hallorave",
       "imageCover": "Couv_42297.jpg",
@@ -80,6 +82,7 @@ async function launchScraper() {
     {
       "serieId": 10739,
       "serieTitle": "Le roi des mouches",
+      "albumNumber": 2,
       "albumId": 77882,
       "albumTitle": "L'origine du monde",
       "imageCover": "RoiDesMouchesLe2_18092008_213101.jpg",
@@ -97,6 +100,7 @@ async function launchScraper() {
     {
       "serieId": 10739,
       "serieTitle": "Le roi des mouches",
+      "albumNumber": 3,
       "albumId": 178960,
       "albumTitle": "Sourire suivant",
       "imageCover": "178960_c.jpg",
@@ -111,23 +115,6 @@ async function launchScraper() {
       "editor": "Glénat",
       "nbrOfPages": 62
     },
-    {
-      "serieId": 10739,
-      "serieTitle": "Le roi des mouches",
-      "albumId": 233719,
-      "albumTitle": "Le Roi des mouches",
-      "imageCover": "Couv_233719.jpg",
-      "imageExtract": "PlancheA_233719.jpg",
-      "imageReverse": null,
-      "voteAverage": 100,
-      "voteCount": 4,
-      "scenario": "Pirus, Michel",
-      "drawing": "Mezzo",
-      "colors": "Ruby",
-      "date": "12/2014",
-      "editor": "Glénat",
-      "nbrOfPages": 186
-    }
   ]
 }
 ```
@@ -150,11 +137,9 @@ public imageReverse: string | null;
 
 ## TODO
 
-- [ ] scrap album number
 - [ ] scrap serie description
 - [ ] scrap serie recommendations
 - [ ] scrap serie popularity
-- [ ] use async fs read / write with lock for no conflict
 
 ## License
 

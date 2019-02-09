@@ -3,6 +3,8 @@ import { Album } from './album';
 export class Serie {
   serieId: number;
   serieTitle: string;
+  numberOfAlbums : number;
+  serieCover! : string | null;
   albumsId!: number[];
   voteAverage!: number;
   voteCount!: number;
@@ -10,11 +12,13 @@ export class Serie {
   constructor($: CheerioAPI) {
     this.serieId = parseInt($('.idbel').text(), 10);
     this.serieTitle = $('h1 a').text();
+    this.numberOfAlbums = parseInt($('.serie-info').text().match(/Tomes? :([0-9]+)/)![1], 10);
   }
 
   public addAlbumsInfo(albums: Album[]) {
     this.albumsId = albums.map(album => album.albumId);
     [this.voteAverage, this.voteCount] = this.getVoteAverage(albums);
+    this.serieCover = albums[0] && albums[0].imageCover;
   }
 
   private getVoteAverage(albums: Album[]) {
@@ -27,6 +31,6 @@ export class Serie {
     if (voteCount === 0) {
       return [0, 0];
     }
-    return [voteAverage / voteCount, voteCount];
+    return [Math.floor(voteAverage / voteCount * 10) / 10, voteCount];
   }
 }

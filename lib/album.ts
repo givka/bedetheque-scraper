@@ -8,6 +8,7 @@
 export class Album {
   public serieId: number;
   public albumId: number;
+  public albumNumber: number;
   public serieTitle: string;
   public albumTitle: string | null;
   public scenario!: string | null;
@@ -26,6 +27,7 @@ export class Album {
   constructor(page : Cheerio, $: CheerioAPI, serieId: number, serieTitle: string) {
     this.serieId = serieId;
     this.serieTitle = serieTitle;
+    this.albumNumber = this.findAlbumNumber(page);
     this.albumId = parseInt(page.children().first().attr('name'), 10);
     this.albumTitle = page.find('.album-main .titre').attr('title');
     this.imageCover = this.findImage(page, 'browse-couvertures', 'Couvertures');
@@ -34,6 +36,11 @@ export class Album {
     this.voteAverage = this.findVoteAverage(page, $);
     this.voteCount = this.findVoteCount(page, $);
     this.addDetails(page, $);
+  }
+
+  private findAlbumNumber(page: Cheerio) {
+    const match = page.find('.album-main .titre > span').text().match(/([0-9]+)/);
+    return parseInt(match && match[1] || '1', 10);
   }
 
   private findVoteAverage(page : Cheerio, $: CheerioAPI) {
