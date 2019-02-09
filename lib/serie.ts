@@ -12,7 +12,9 @@ export class Serie {
   constructor($: CheerioAPI) {
     this.serieId = parseInt($('.idbel').text(), 10);
     this.serieTitle = $('h1 a').text();
-    this.numberOfAlbums = parseInt($('.serie-info').text().match(/Tomes? :([0-9]+)/)![1], 10);
+
+    const match = $('.serie-info').text().match(/Tomes? :([0-9]+)/);
+    this.numberOfAlbums = parseInt(match && match[1] || '0', 10);
   }
 
   public addAlbumsInfo(albums: Album[]) {
