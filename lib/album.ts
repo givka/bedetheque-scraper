@@ -30,7 +30,7 @@ export class Album {
     this.albumNumber = this.findAlbumNumber(page);
     this.albumId = parseInt(page.children().first().attr('name'), 10);
     this.albumTitle = page.find('.album-main .titre').attr('title');
-    this.imageCover = this.findImage(page, 'browse-couvertures', 'Couvertures');
+    this.imageCover = this.findCover(page);
     this.imageExtract = this.findImage(page, 'browse-planches', 'Planches');
     this.imageReverse = this.findImage(page, 'browse-versos', 'Versos');
     this.voteAverage = this.findVoteAverage(page, $);
@@ -53,6 +53,13 @@ export class Album {
     const voteCount = page.find('.ratingblock p').text();
     if (!voteCount) { return 0; }
     return parseInt(voteCount.match(/\(([0-9]+) vote/)![1], 10);
+  }
+
+  private findCover(page: Cheerio) {
+    const image = page.find('.couv .titre img').attr('src');
+    return image
+      ? image.replace('https://www.bedetheque.com/cache/thb_couv/', '')
+      : null;
   }
 
   private findImage(page: Cheerio, className: string, path: string) {
