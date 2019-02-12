@@ -1,4 +1,5 @@
 import { Album } from './album';
+import { Utils } from './utils';
 
 export class Serie {
   serieId: number;
@@ -8,13 +9,15 @@ export class Serie {
   albumsId!: number[];
   voteAverage!: number;
   voteCount!: number;
+  recommendationsId: number[];
 
   constructor($: CheerioAPI) {
     this.serieId = parseInt($('.idbel').text(), 10);
     this.serieTitle = $('h1 a').text();
 
     const match = $('.serie-info').text().match(/Tomes? :([0-9]+)/);
-    this.numberOfAlbums = parseInt(match && match[1] || '0', 10);
+    this.numberOfAlbums = match ? parseInt(match[1], 10) : 0;
+    this.recommendationsId = this.getRecommendationsId($);
   }
 
   public addAlbumsInfo(albums: Album[]) {
@@ -34,5 +37,12 @@ export class Serie {
       return [0, 0];
     }
     return [Math.floor(voteAverage / voteCount * 10) / 10, voteCount];
+  }
+
+  private getRecommendationsId($: CheerioAPI) {
+    return $('.alire li a')
+    .map((i, elem) => $(elem).attr('href'))
+    .get()
+    .map(url => Utils.urlToSerieID(url));
   }
 }

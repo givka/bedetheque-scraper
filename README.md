@@ -56,6 +56,15 @@ async function launchScraper() {
       77882,
       178960,
     ],
+    "recommendationsId": [
+       3633,
+       51397,
+       326,
+       13687,
+       14319,
+       31517,
+       24640 
+    ],
     "voteAverage": 87,
     "voteCount": 202,
     "serieCover": "Couv_42297.jpg"
@@ -138,7 +147,6 @@ public imageReverse: string | null;
 ## TODO
 
 - [ ] scrap serie description
-- [ ] scrap serie recommendations
 - [ ] scrap serie popularity
 
 ## License
