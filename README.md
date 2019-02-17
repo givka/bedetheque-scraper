@@ -130,7 +130,13 @@ async function run() {
 ```
 
 ## Image Sizes
-
+### Serie
+```typescript
+// serieCoverLarge: https://www.bedetheque.com/media/Couvertures/${serieCover}
+// serieCoverSmall: https://www.bedetheque.com/cache/thb_couv/${serieCover}
+public serieCover: string | null;
+```
+### Album
 ```typescript
 // imageCoverLarge: https://www.bedetheque.com/media/Couvertures/${imageCover}
 // imageCoverSmall: https://www.bedetheque.com/cache/thb_couv/${imageCover}
@@ -144,7 +150,11 @@ public imageExtract: string | null;
 // imageReverseSmall: https://www.bedetheque.com/cache/thb_versos/${imageReverse}
 public imageReverse: string | null;
 ```
-
+### Author
+```typescript
+// imageLarge: https://www.bedetheque.com/media/Photos/${image}
+public image: string | null;
+```
 ## TODO
 
 - [ ] scrap serie description

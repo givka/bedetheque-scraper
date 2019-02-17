@@ -1,5 +1,6 @@
 import { Utils } from './utils';
 
+// image: https://www.bedetheque.com/media/Photos/${image}
 export class Author{
   id: number | null;
   image: string | null;
@@ -17,7 +18,7 @@ export class Author{
     this.id = match ? parseInt(match[1], 10) : null;
 
     this.name = $('.auteur-nom').text();
-    this.image = $('.auteur-image img').attr('src');
+    this.image = this.getImage($);
 
     match = info.match(/Naissance :le ([0-9]+\/[0-9]+\/[0-9]+)/);
     this.birthDate = match ? match[1] : null;
@@ -34,6 +35,9 @@ export class Author{
     this.seriesIdBoth = this.getSeriesId($, series, true, true);
     this.seriesIdScenario = this.getSeriesId($, series, true, false);
     this.seriesIdDrawing = this.getSeriesId($, series, false, true);
+
+    console.log(this);
+
   }
 
   private getSeriesId($:CheerioAPI, series: Cheerio, isScen: boolean, isDraw: boolean) {
@@ -46,5 +50,12 @@ export class Author{
     .map((i, e) => $(e).find('.serie a').attr('href'))
     .get()
     .map(url => Utils.urlToSerieID(url));
+  }
+
+  private getImage($: CheerioAPI) {
+    const image = $('.auteur-image img').attr('src');
+    return image !== 'https://www.bdgest.com/skin/nophoto.png'
+    ? image.replace('https://www.bedetheque.com/media/Photos/', '')
+    : null;
   }
 }
