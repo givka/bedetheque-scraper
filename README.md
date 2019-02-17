@@ -21,28 +21,27 @@ npm install bedetheque-scraper --save
 ## Basic Usage
 
 ```typescript
-const { ProxyFetcher, Scraper, Message } = require('bedetheque-scraper')
-//or using CommonJS
-import { ProxyFetcher, Scraper, Message } from 'bedetheque-scraper'
+const { ProxyFetcher, Scraper } = require('bedetheque-scraper')
+// or using CommonJS
+// import { ProxyFetcher, Scraper } from 'bedetheque-scraper'
 
-async function launchScraper() {
+async function run() {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'.split('');
   for (const letter of letters) {
-    const proxyList = await ProxyFetcher.getFreeProxyList(5000);
-    const seriesUrl = await Scraper.getSeriesUrlFromLetter(proxyList, letter);
-    const series = seriesUrl.map(async (serieUrl, index) => {
-      const { serie, albums } = await Scraper.getSerie(proxyList, serieUrl, index * 500);
-      console.log({ serie, albums });
-      return { serie, albums };
-    });
-    await Promise.all(series);
-    Message.letterDone(letter);
+    const proxyList = await ProxyFetcher.getFreeProxyList();
+
+    const [series, authors] = await Promise.all([
+      Scraper.scrapeSeries(proxyList, letter),
+      Scraper.scrapeAuthors(proxyList, letter),
+    ]);
+
+    console.log(`${letter} done with ${series.length} series and ${authors.length} authors`);
   }
-  Message.databaseScraped();
 }
 ```
 
 ## Structure
+### Serie
 ```json
 // 'https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html'
 
@@ -51,20 +50,8 @@ async function launchScraper() {
     "serieId": 10739,
     "serieTitle": "Le roi des mouches",
     "numberOfAlbums": 3,
-    "albumsId": [
-      42297,
-      77882,
-      178960,
-    ],
-    "recommendationsId": [
-       3633,
-       51397,
-       326,
-       13687,
-       14319,
-       31517,
-       24640 
-    ],
+    "albumsId": [ 42297, 77882, 178960 ],
+    "recommendationsId": [ 3633, 51397, 326, 13687, 14319, 31517, 24640 ],
     "voteAverage": 87,
     "voteCount": 202,
     "serieCover": "Couv_42297.jpg"
@@ -125,6 +112,20 @@ async function launchScraper() {
       "nbrOfPages": 62
     },
   ]
+}
+```
+### Author
+```json
+// 'https://www.bedetheque.com/auteur-232-BD-Blain-Christophe.html'
+{
+  "id": 232,
+  "name": "Blain, Christophe",
+  "image": "https://www.bedetheque.com/media/Photos/Photo_232.jpg",
+  "birthDate": "10/08/1970",
+  "deathDate": null,
+  "seriesIdScenario": [],
+  "seriesIdDrawing": [ 55755, 3168, 2325, 1358, 10330, 1994 ],
+  "seriesIdBoth": [ 27589, 38023, 14662, 517, 24260, 3898 ]
 }
 ```
 

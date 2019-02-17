@@ -1,7 +1,6 @@
 import * as cheerio from 'cheerio';
 import lodash from 'lodash';
 import axiosHttpsProxyFix from 'axios-https-proxy-fix';
-import { Message } from './message';
 
 export interface ProxyType{
   host: string;
@@ -9,13 +8,13 @@ export interface ProxyType{
 }
 
 export class ProxyFetcher {
-  public static async getFreeProxyList(timeout : number) {
-    Message.searchingFreeProxiesList(timeout);
+  public static async getFreeProxyList(timeout = 5000) {
+    console.log('→ searching for free proxies');
     const list: ProxyType[] = await axiosHttpsProxyFix
     .get(`https://proxyscrape.com/api?request=getproxies&proxytype=http&timeout=${timeout}`)
       .then(response => response.data.trim().split('\r\n')
         .map((p: string) => ({ host: p.split(':')[0], port: parseInt(p.split(':')[1], 10) })));
-    Message.foundFreeProxiesList(list, timeout);
+    console.log(`→ found ${list.length} free proxies`);
     return list;
   }
 
@@ -26,9 +25,8 @@ export class ProxyFetcher {
     return this.timeoutRequest(60000, axiosHttpsProxyFix.get(url, { proxy }))
       .then((result: any) => cheerio.load(result.data))
       .catch((error) => {
-        console.log(`retry: ${nbrRetry} - ${url} ${error.message || error.code || error}`);
-        const newNbrRetry = nbrRetry - 1;
-        return this.requestProxy(list, url, newNbrRetry);
+        console.log(`⟳ request: ${nbrRetry} - ${url}, ${error.message || error.code || error}`);
+        return this.requestProxy(list, url, nbrRetry - 1);
       });
   }
 
