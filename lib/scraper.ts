@@ -19,7 +19,7 @@ export class Scraper {
   static async getSeriesUrlFromLetter(proxyList: ProxyType[], letter: string): Promise<string[]> {
     console.log(`${letter}: searching for series urls...`);
     const baseUrl = 'https://www.bedetheque.com/bandes_dessinees_';
-    const $: CheerioAPI = await ProxyFetcher.requestProxy(proxyList, `${baseUrl}${letter}.html`, 1);
+    const $: CheerioAPI = await ProxyFetcher.requestProxy(proxyList, `${baseUrl}${letter}.html`);
     if (!$) { return this.getSeriesUrlFromLetter(proxyList, letter); }
     const urls = $('.nav-liste li')
       .filter((index, element) => ($(element).find('img').attr('src').includes('France')))
