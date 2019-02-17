@@ -50,7 +50,7 @@ export class Scraper {
     }
     const serie = new Serie($);
     const albums = $('.liste-albums > li')
-    .filter((index, elem) => index < serie.numberOfAlbums)
+    .filter((index, elem) => $(elem).find('.numa').text() === '')
     .map((index, elem) => new Album($(elem), $, serie.serieId, serie.serieTitle))
     .get() as unknown as Album[];
     serie.addAlbumsInfo(albums);

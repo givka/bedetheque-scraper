@@ -35,9 +35,6 @@ export class Author{
     this.seriesIdBoth = this.getSeriesId($, series, true, true);
     this.seriesIdScenario = this.getSeriesId($, series, true, false);
     this.seriesIdDrawing = this.getSeriesId($, series, false, true);
-
-    console.log(this);
-
   }
 
   private getSeriesId($:CheerioAPI, series: Cheerio, isScen: boolean, isDraw: boolean) {
