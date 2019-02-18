@@ -118,7 +118,7 @@ async function run() {
 ```json
 // 'https://www.bedetheque.com/auteur-232-BD-Blain-Christophe.html'
 {
-  "id": 232,
+  "authorId": 232,
   "name": "Blain, Christophe",
   "image": "Photo_232.jpg",
   "birthDate": "10/08/1970",

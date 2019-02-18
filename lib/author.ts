@@ -2,7 +2,7 @@ import { Utils } from './utils';
 
 // image: https://www.bedetheque.com/media/Photos/${image}
 export class Author{
-  id: number | null;
+  authorId: number | null;
   image: string | null;
   name: string;
   birthDate: string | null;
@@ -15,7 +15,7 @@ export class Author{
     const info = $('.auteur-info').text();
 
     let match = info.match(/Identifiant :([0-9]+)/);
-    this.id = match ? parseInt(match[1], 10) : null;
+    this.authorId = match ? parseInt(match[1], 10) : null;
 
     this.name = $('.auteur-nom').text();
     this.image = this.getImage($);
