@@ -51,6 +51,7 @@ export class Author{
 
   private getImage($: CheerioAPI) {
     const image = $('.auteur-image img').attr('src');
+    if (!image) return null;
     return image !== 'https://www.bdgest.com/skin/nophoto.png'
     ? image.replace('https://www.bedetheque.com/media/Photos/', '')
     : null;
