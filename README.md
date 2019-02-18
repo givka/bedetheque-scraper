@@ -120,7 +120,7 @@ async function run() {
 {
   "id": 232,
   "name": "Blain, Christophe",
-  "image": "https://www.bedetheque.com/media/Photos/Photo_232.jpg",
+  "image": "Photo_232.jpg",
   "birthDate": "10/08/1970",
   "deathDate": null,
   "seriesIdScenario": [],
