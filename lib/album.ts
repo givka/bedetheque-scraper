@@ -5,6 +5,8 @@
 // imageReverseLarge: https://www.bedetheque.com/media/Versos/${imageReverse}
 // imageReverseSmall: https://www.bedetheque.com/cache/thb_versos/${imageReverse}
 
+const probe = require('probe-image-size');
+
 export class Album {
   public serieId: number;
   public albumId: number;
@@ -18,8 +20,11 @@ export class Album {
   public editor!: string | null;
   public nbrOfPages!: number | null;
   public imageCover: string | null;
+  public imageCoverWidth: number | null;
+  public imageCoverHeight: number | null;
   public imageExtract: string | null;
   public imageReverse: string | null;
+
   // voteAverage /100
   public voteAverage: number;
   public voteCount: number;
@@ -116,5 +121,18 @@ export class Album {
       default:
         break;
     }
+  }
+
+  getImageDimensions() {
+    if (this.imageCover == null) return;
+
+    return probe(`https://www.bedetheque.com/media/Couvertures/${this.imageCover}`)
+      .then((dimension: any) => {
+        this.imageCoverWidth = dimension.width;
+        this.imageCoverHeight = dimension.height;
+      })
+      .catch(() => {
+        // do nothing
+      });
   }
 }

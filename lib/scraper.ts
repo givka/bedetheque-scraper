@@ -64,7 +64,7 @@ export class Scraper {
       .filter((index, elem) => $(elem).find('.numa').text() === '')
       .map((index, elem) => new Album($(elem), $, serie.serieId, serie.serieTitle))
       .get() as unknown as Album[];
-    serie.addAlbumsInfo(albums);
+    await serie.addAlbumsInfo(albums);
     console.log(`✔ serie:   ${serie.serieTitle} with ${serie.albumsId.length} albums`);
     return {serie, albums};
   }
@@ -78,8 +78,10 @@ export class Scraper {
         return ProxyFetcher.requestProxy(url, 60000);
       });
 
-
     const author = new Author($);
+    await author.getImageDimensions();
+
+    console.log(author);
     console.log(`✔ author:  ${author.name}`);
     return author;
   }
