@@ -11,7 +11,7 @@ export class ProxyFetcher {
   public static async getFreeProxyList(timeout = 5000) {
     console.log('→ searching for free proxies');
     const list: ProxyType[] = await axiosHttpsProxyFix
-    .get(`https://proxyscrape.com/api?request=getproxies&proxytype=http&timeout=${timeout}`)
+    .get(`https://api.proxyscrape.com/?request=getproxies&proxytype=http&timeout=${timeout}`)
       .then(response => response.data.trim().split('\r\n')
         .map((p: string) => ({ host: p.split(':')[0], port: parseInt(p.split(':')[1], 10) })));
     console.log(`→ found ${list.length} free proxies`);
