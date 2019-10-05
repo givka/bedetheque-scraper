@@ -20,31 +20,27 @@ npm install bedetheque-scraper --save
 
 ## Basic Usage
 
-```typescript
-const { ProxyFetcher, Scraper } = require('bedetheque-scraper')
+```javascript
+const { Scraper } = require('bedetheque-scraper');
 // or using CommonJS
-// import { ProxyFetcher, Scraper } from 'bedetheque-scraper'
+// import { Scraper } from 'bedetheque-scraper'
 
 async function run() {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'.split('');
   for (const letter of letters) {
-    const proxyList = await ProxyFetcher.getFreeProxyList();
-
-    const [series, authors] = await Promise.all([
-      Scraper.scrapeSeries(proxyList, letter),
-      Scraper.scrapeAuthors(proxyList, letter),
-    ]);
-
-    console.log(`${letter} done with ${series.length} series and ${authors.length} authors`);
-  }
+      const series = await Scraper.scrapeSeries(letter);
+      console.log(`${letter} done with ${series.length} series`);
+  
+      const authors = await Scraper.scrapeAuthors(letter);
+      console.log(`${letter} done with ${authors.length} authors`);
+    }
 }
 ```
 
 ## Structure
 ### Serie
+https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html
 ```json
-// 'https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html'
-
 {
   "serie": {
     "serieId": 10739,
@@ -115,8 +111,8 @@ async function run() {
 }
 ```
 ### Author
+https://www.bedetheque.com/auteur-232-BD-Blain-Christophe.html
 ```json
-// 'https://www.bedetheque.com/auteur-232-BD-Blain-Christophe.html'
 {
   "authorId": 232,
   "name": "Blain, Christophe",

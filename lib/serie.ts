@@ -1,17 +1,17 @@
-import { Album } from './album';
-import { Utils } from './utils';
+import {Album} from './album';
+import {Utils} from './utils';
 
 export class Serie {
   serieId: number;
   serieTitle: string;
-  numberOfAlbums : number;
-  serieCover! : string | null;
+  numberOfAlbums: number;
+  serieCover!: string | null;
   albumsId!: number[];
   voteAverage!: number;
   voteCount!: number;
   recommendationsId: number[];
 
-  constructor($: CheerioAPI) {
+  constructor($: CheerioStatic) {
     this.serieId = parseInt($('.idbel').text(), 10);
     this.serieTitle = $('h1 a').text();
 
@@ -39,10 +39,10 @@ export class Serie {
     return [Math.floor(voteAverage / voteCount * 10) / 10, voteCount];
   }
 
-  private getRecommendationsId($: CheerioAPI) {
+  private getRecommendationsId($: CheerioStatic) {
     return $('.alire li a')
-    .map((i, elem) => $(elem).attr('href'))
-    .get()
-    .map(url => Utils.urlToSerieID(url));
+      .map((i, elem) => $(elem).attr('href'))
+      .get()
+      .map(url => Utils.urlToSerieID(url));
   }
 }

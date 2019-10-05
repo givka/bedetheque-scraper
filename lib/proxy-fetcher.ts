@@ -1,44 +1,66 @@
 import * as cheerio from 'cheerio';
 import lodash from 'lodash';
 import axiosHttpsProxyFix from 'axios-https-proxy-fix';
+import {Utils} from './utils';
 
-export interface ProxyType{
+export interface ProxyType {
   host: string;
   port: number;
 }
 
 export class ProxyFetcher {
-  public static async getFreeProxyList(timeout = 5000) {
-    console.log('→ searching for free proxies');
-    const list: ProxyType[] = await axiosHttpsProxyFix
-    .get(`https://api.proxyscrape.com/?request=getproxies&proxytype=http&timeout=${timeout}`)
+
+  private static _availableProxies: ProxyType[] = [];
+
+  private static _goodProxies: ProxyType[] = [];
+
+  static async updateProxyList(timeout: 5000 | 10000 = 5000) {
+    console.log(`🔍  searching for free proxies`);
+
+    this._availableProxies = await axiosHttpsProxyFix
+      .get(`https://api.proxyscrape.com/?request=getproxies&proxytype=http&timeout=${timeout}`)
       .then(response => response.data.trim().split('\r\n')
-        .map((p: string) => ({ host: p.split(':')[0], port: parseInt(p.split(':')[1], 10) })));
-    console.log(`→ found ${list.length} free proxies`);
-    return list;
+        .map((p: string) => ({host: p.split(':')[0], port: parseInt(p.split(':')[1], 10)})));
+
+    console.log(`→ found ${this._availableProxies.length} free proxies`);
   }
 
-  public static async requestProxy(list: ProxyType[], urlRaw: string, nbrRetry = 5): Promise<any> {
-    if (nbrRetry === 0) { return null; }
+  static async requestProxy(urlRaw: string, timeout: number) {
     const url = encodeURI(urlRaw);
-    const proxy = this.getRandomProxy(list);
-    return this.timeoutRequest(60000, axiosHttpsProxyFix.get(url, { proxy }))
-      .then((result: any) => cheerio.load(result.data))
+    const proxy = this._pickProxy();
+
+    return Utils.promiseWithTimeout(axiosHttpsProxyFix.get(url, {proxy}), timeout)
+      .then((result: any) => {
+        if (!this._goodProxies.includes(proxy)) this._addGoodProxy(proxy);
+        return cheerio.load(result.data);
+      })
       .catch((error) => {
-        console.log(`⟳ request: ${nbrRetry} - ${url}, ${error.message || error.code || error}`);
-        return this.requestProxy(list, url, nbrRetry - 1);
+        if (this._availableProxies.includes(proxy)) this._removeProxy(proxy);
+        throw new Error(error);
       });
   }
 
-  private static getRandomProxy(list: ProxyType[]) {
+  private static _addGoodProxy(proxy: ProxyType) {
+    // check if it has already been removed.
+    if (!this._availableProxies.includes(proxy)) return;
+
+    this._goodProxies.push(proxy);
+    console.log(`+ proxy:   ${this._goodProxies.length}/${this._availableProxies.length} healthy`);
+  }
+
+  private static _removeProxy(proxy: ProxyType) {
+    // check if it was a good proxy.
+    if (this._goodProxies.includes(proxy))
+      this._goodProxies.splice(this._goodProxies.indexOf(proxy), 1);
+
+    this._availableProxies.splice(this._availableProxies.indexOf(proxy), 1);
+    console.log(`- proxy:   ${this._goodProxies.length}/${this._availableProxies.length} healthy`);
+  }
+
+  private static _pickProxy() {
+    const list = this._goodProxies.length != 0 ? this._goodProxies : this._availableProxies;
     const indexProxy = lodash.random(list.length - 1);
     return list[indexProxy];
   }
 
-  private static timeoutRequest(ms: number, promise: Promise<any>) {
-    return new Promise(((resolve, reject) => {
-      setTimeout(() => { reject(new Error('timeout')); }, ms);
-      promise.then(resolve, reject);
-    }));
-  }
 }
