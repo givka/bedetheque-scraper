@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "ts-node test.ts",
-    "prepublish": "tsc"
+    "prepublishOnly": "tsc"
   },
   "keywords": [
     "scraper",
