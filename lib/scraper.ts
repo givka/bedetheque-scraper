@@ -81,7 +81,6 @@ export class Scraper {
     const author = new Author($);
     await author.getImageDimensions();
 
-    console.log(author);
     console.log(`✔ author:  ${author.name}`);
     return author;
   }

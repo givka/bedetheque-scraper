@@ -12,8 +12,6 @@ export class ProxyFetcher {
 
   private static _availableProxies: ProxyType[] = [];
 
-  private static _goodProxies: ProxyType[] = [];
-
   static async updateProxyList(timeout: 5000 | 10000 = 5000) {
     console.log(`🔍  searching for free proxies`);
 
@@ -30,37 +28,19 @@ export class ProxyFetcher {
     const proxy = this._pickProxy();
 
     return Utils.promiseWithTimeout(axiosHttpsProxyFix.get(url, {proxy}), timeout)
-      .then((result: any) => {
-        if (!this._goodProxies.includes(proxy)) this._addGoodProxy(proxy);
-        return cheerio.load(result.data);
-      })
+      .then((result: any) => cheerio.load(result.data))
       .catch((error) => {
-        if (this._availableProxies.includes(proxy)) this._removeProxy(proxy);
+        if (this._availableProxies.includes(proxy)){
+          this._availableProxies.splice(this._availableProxies.indexOf(proxy), 1);
+          console.log(`- proxies: ${this._availableProxies.length}`);
+        }
         throw new Error(error);
       });
   }
 
-  private static _addGoodProxy(proxy: ProxyType) {
-    // check if it has already been removed.
-    if (!this._availableProxies.includes(proxy)) return;
-
-    this._goodProxies.push(proxy);
-    console.log(`+ proxy:   ${this._goodProxies.length}/${this._availableProxies.length} healthy`);
-  }
-
-  private static _removeProxy(proxy: ProxyType) {
-    // check if it was a good proxy.
-    if (this._goodProxies.includes(proxy))
-      this._goodProxies.splice(this._goodProxies.indexOf(proxy), 1);
-
-    this._availableProxies.splice(this._availableProxies.indexOf(proxy), 1);
-    console.log(`- proxy:   ${this._goodProxies.length}/${this._availableProxies.length} healthy`);
-  }
-
   private static _pickProxy() {
-    const list = this._goodProxies.length != 0 ? this._goodProxies : this._availableProxies;
-    const indexProxy = lodash.random(list.length - 1);
-    return list[indexProxy];
+    const indexProxy = lodash.random(this._availableProxies.length - 1);
+    return this._availableProxies[indexProxy];
   }
 
 }
