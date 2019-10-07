@@ -5,6 +5,7 @@
 // imageReverseLarge: https://www.bedetheque.com/media/Versos/${imageReverse}
 // imageReverseSmall: https://www.bedetheque.com/cache/thb_versos/${imageReverse}
 
+const moment = require('moment');
 const probe = require('probe-image-size');
 
 export class Album {
@@ -16,7 +17,7 @@ export class Album {
   public scenario!: string | null;
   public drawing!: string | null;
   public colors!: string | null;
-  public date!: string | null;
+  public date!: number;
   public editor!: string | null;
   public nbrOfPages!: number | null;
   public imageCover: string | null;
@@ -110,7 +111,8 @@ export class Album {
         this.colors = value;
         break;
       case 'dépot légal':
-        this.date = value.slice(0, 7);
+        const date = value.slice(0, 7);
+        this.date = moment(date, 'MM/YYYY').unix();
         break;
       case 'editeur':
         this.editor = value;

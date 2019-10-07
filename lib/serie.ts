@@ -12,6 +12,8 @@ export class Serie {
   voteAverage!: number;
   voteCount!: number;
   recommendationsId: number[];
+  dateBegin: number;
+  dateEnd: number;
 
   constructor($: CheerioStatic) {
     this.serieId = parseInt($('.idbel').text(), 10);
@@ -34,6 +36,8 @@ export class Serie {
     this.serieCoverWidth = albums[0].imageCoverWidth;
     this.serieCoverHeight = albums[0].imageCoverHeight;
 
+    this.dateBegin = albums[0].date;
+    this.dateEnd = albums[albums.length - 1].date;
   }
 
   private getVoteAverage(albums: Album[]) {
