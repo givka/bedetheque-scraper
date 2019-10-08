@@ -8,10 +8,6 @@ NodeJS script to scrap the entire database of [bdgest.com](https://www.bdgest.co
 
 <img src="https://www.bdgest.com/skin/logo_bdgest_250.png">
 
-## How it works
-
-It fetches a free proxy list with low timeout, then procede to scrape all comic series and albums letter by letter from bedetheque.com.
-It will retry 5 times by serie until the serie and its albums are scraped.
 ## Installation
 
 ```bash
@@ -25,21 +21,63 @@ const { Scraper } = require('bedetheque-scraper');
 // or using CommonJS
 // import { Scraper } from 'bedetheque-scraper'
 
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'.split('');
+
 async function run() {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'.split('');
   for (const letter of letters) {
-      const series = await Scraper.scrapeSeries(letter);
-      console.log(`${letter} done with ${series.length} series`);
-  
-      const authors = await Scraper.scrapeAuthors(letter);
-      console.log(`${letter} done with ${authors.length} authors`);
-    }
+    const serieUrls = await Scraper.getSeriesUrlFromLetter(letter);
+    for(const serieUrl of serieUrls) {
+      const {serie, albums} = await Scraper.getSerie(serieUrl);
+      console.log(serie.serieTitle);
+    }      
+    
+    const authorUrls = await Scraper.getAuthorsUrlFromLetter(letter);
+    for(const authorUrl of authorUrls) {
+      const author = await Scraper.getAuthor(authorUrl);
+      console.log(author.name);
+    }      
+  }
 }
 ```
+## API
+### SeriesUrlFromLetter
+```ts
+Scraper.getSeriesUrlFromLetter(letter: string, proxy?: Proxy): Promise<string[]>;
+```
+#### Example
+`letter = A`
 
-## Structure
+Response body:
+```json
+[
+  "https://www.bedetheque.com/serie-17120-BD-A-18-ans-sous-les-balles-au-Vercors.html",
+  "https://www.bedetheque.com/serie-15457-BD-A-B.html",
+  ...
+]
+```
+### AuthorsUrlFromLetter
+```ts
+Scraper.getAuthorsUrlFromLetter(letter: string, proxy?: Proxy): Promise<string[]>;
+```
+#### Example
+`letter = A`
+
+Response body:
+```json
+[
+  "https://www.bedetheque.com/auteur-13335-BD-A-Ming.html",
+  "https://www.bedetheque.com/auteur-13336-BD-A-Ying.html",
+  ...
+]
+```
 ### Serie
-https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html
+```ts
+Scraper.getSerie(url: string, proxy?: Proxy): Promise<{serie, albums}>;
+```
+#### Example
+`url = https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html`
+
+Response body
 ```json
 {
   "serie": {
@@ -50,7 +88,11 @@ https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html
     "recommendationsId": [ 3633, 51397, 326, 13687, 14319, 31517, 24640 ],
     "voteAverage": 87,
     "voteCount": 202,
-    "serieCover": "Couv_42297.jpg"
+    "serieCover": "Couv_42297.jpg",
+    "serieCoverWidth": 650,
+    "serieCoverHeight": 863,
+    "dateBegin": 1104534000,
+    "dateEnd": 1356994800 
   },
   "albums": [
     {
@@ -67,9 +109,11 @@ https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html
       "scenario": "Pirus, Michel",
       "drawing": "Mezzo",
       "colors": "Ruby",
-      "date": "01/2005",
+      "date": 1104534000,
       "editor": "Albin Michel",
-      "nbrOfPages": 62
+      "nbrOfPages": 62,
+      "imageCoverWidth": 650,
+      "imageCoverHeight": 863
     },
     {
       "serieId": 10739,
@@ -85,9 +129,11 @@ https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html
       "scenario": "Pirus, Michel",
       "drawing": "Mezzo",
       "colors": "Ruby",
-      "date": "09/2008",
+      "date": 1220220000,
       "editor": "Glénat",
-      "nbrOfPages": 62
+      "nbrOfPages": 62,
+      "imageCoverWidth": 400,
+      "imageCoverHeight": 533 
     },
     {
       "serieId": 10739,
@@ -103,15 +149,22 @@ https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html
       "scenario": "Pirus, Michel",
       "drawing": "Mezzo",
       "colors": "Ruby",
-      "date": "01/2013",
+      "date": 1356994800,
       "editor": "Glénat",
-      "nbrOfPages": 62
-    },
+      "nbrOfPages": 62,
+      "imageCoverWidth": 500,
+      "imageCoverHeight": 666
+    }
   ]
 }
 ```
 ### Author
-https://www.bedetheque.com/auteur-232-BD-Blain-Christophe.html
+```ts
+Scraper.getAuthor(url: string, proxy?: Proxy): Promise<Author>;
+```
+`url = https://www.bedetheque.com/auteur-232-BD-Blain-Christophe.html`
+
+Response body:
 ```json
 {
   "authorId": 232,
@@ -151,11 +204,6 @@ public imageReverse: string | null;
 // imageLarge: https://www.bedetheque.com/media/Photos/${image}
 public image: string | null;
 ```
-## TODO
-
-- [ ] scrap serie description
-- [ ] scrap serie popularity
-
 ## License
 
   [MIT](LICENSE)

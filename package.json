@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "axios-https-proxy-fix": "^0.17.1",
+    "chalk": "^2.4.2",
     "cheerio": "^1.0.0-rc.2",
     "fs-extra": "^7.0.0",
     "lodash": "^4.17.15",

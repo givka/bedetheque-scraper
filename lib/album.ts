@@ -5,6 +5,8 @@
 // imageReverseLarge: https://www.bedetheque.com/media/Versos/${imageReverse}
 // imageReverseSmall: https://www.bedetheque.com/cache/thb_versos/${imageReverse}
 
+import {Serie} from './serie';
+
 const moment = require('moment');
 const probe = require('probe-image-size');
 
@@ -33,23 +35,23 @@ export class Album {
   constructor(page: Cheerio, $: CheerioStatic, serieId: number, serieTitle: string) {
     this.serieId = serieId;
     this.serieTitle = serieTitle;
-    this.albumNumber = this.findAlbumNumber(page);
+    this.albumNumber = Album.findAlbumNumber(page);
     this.albumId = parseInt(page.children().first().attr('name'), 10);
     this.albumTitle = page.find('.album-main .titre').attr('title');
-    this.imageCover = this.findCover(page);
-    this.imageExtract = this.findImage(page, 'browse-planches', 'Planches');
-    this.imageReverse = this.findImage(page, 'browse-versos', 'Versos');
-    this.voteAverage = this.findVoteAverage(page, $);
+    this.imageCover = Album.findCover(page);
+    this.imageExtract = Album.findImage(page, 'browse-planches', 'Planches');
+    this.imageReverse = Album.findImage(page, 'browse-versos', 'Versos');
+    this.voteAverage = Album.findVoteAverage(page, $);
     this.voteCount = this.findVoteCount(page, $);
     this.addDetails(page, $);
   }
 
-  private findAlbumNumber(page: Cheerio) {
+  private static findAlbumNumber(page: Cheerio) {
     const match = page.find('.album-main .titre > span').text().match(/([0-9]+)/);
     return parseInt(match && match[1] || '1', 10);
   }
 
-  private findVoteAverage(page: Cheerio, $: CheerioStatic) {
+  private static findVoteAverage(page: Cheerio, $: CheerioStatic) {
     const voteAverage = page.find('.ratingblock  strong').text();
     return voteAverage ? 20 * parseFloat(voteAverage) : 0;
   }
@@ -65,14 +67,14 @@ export class Album {
     return parseInt(voteCount.match(/\(([0-9]+) vote/)![1], 10);
   }
 
-  private findCover(page: Cheerio) {
+  private static findCover(page: Cheerio) {
     const image = page.find('.couv .titre img').attr('src');
     return image
       ? image.replace('https://www.bedetheque.com/cache/thb_couv/', '')
       : null;
   }
 
-  private findImage(page: Cheerio, className: string, path: string) {
+  private static findImage(page: Cheerio, className: string, path: string) {
     const image = page.find(`.sous-couv .${className}`).attr('href');
     return image
       ? image.replace(`https://www.bedetheque.com/media/${path}/`, '')
@@ -136,5 +138,12 @@ export class Album {
       .catch(() => {
         // do nothing
       });
+  }
+
+  static formatAlbumsFromSerie($: CheerioStatic, serie: Serie) {
+    return $('.liste-albums > li')
+      .filter((index, elem) => $(elem).find('.numa').text() === '')
+      .map((index, elem) => new Album($(elem), $, serie.serieId, serie.serieTitle))
+      .get() as unknown as Album[];
   }
 }

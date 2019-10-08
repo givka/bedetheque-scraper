@@ -1,4 +1,20 @@
+import axiosHttpsProxyFix, {AxiosResponse} from 'axios-https-proxy-fix';
+import {Proxy} from './proxy-fetcher';
+import * as cheerio from 'cheerio';
+
 export class Utils {
+  static requestWithProxy(urlRaw: string, proxy: Proxy) {
+    const url = encodeURI(urlRaw);
+    return Utils.promiseWithTimeout(axiosHttpsProxyFix.get(url, {proxy}), 60000)
+      .then((result: AxiosResponse) => {
+        const $ = cheerio.load(result.data);
+        if ($('title').text() == '') {
+          throw new Error('IP is blacklisted');
+        }
+        return $;
+      });
+  }
+
   static sleepFor(ms: number) {
     return new Promise((resolve) => {
       setTimeout(() => {
