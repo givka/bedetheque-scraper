@@ -39,9 +39,6 @@ export class Scraper {
     const author = new Author($);
     await author.getImageDimensions();
 
-    console.log('title: ' + $('title').text());
-
-
     return author;
   }
 }
