@@ -52,7 +52,7 @@ Response body:
 [
   "https://www.bedetheque.com/serie-17120-BD-A-18-ans-sous-les-balles-au-Vercors.html",
   "https://www.bedetheque.com/serie-15457-BD-A-B.html",
-  ...
+  "..."
 ]
 ```
 ### AuthorsUrlFromLetter
@@ -67,7 +67,7 @@ Response body:
 [
   "https://www.bedetheque.com/auteur-13335-BD-A-Ming.html",
   "https://www.bedetheque.com/auteur-13336-BD-A-Ying.html",
-  ...
+  "..."
 ]
 ```
 ### Serie
@@ -162,6 +162,7 @@ Response body
 ```ts
 Scraper.getAuthor(url: string, proxy?: Proxy): Promise<Author>;
 ```
+#### Example
 `url = https://www.bedetheque.com/auteur-232-BD-Blain-Christophe.html`
 
 Response body:
