@@ -21,6 +21,7 @@ export class Album {
   public colors!: string | null;
   public date!: number;
   public editor!: string | null;
+  public estimationEuros!: number[] | null
   public nbrOfPages!: number | null;
   public imageCover: string | null;
   public imageCoverWidth: number | null;
@@ -122,6 +123,17 @@ export class Album {
       case 'planches':
         this.nbrOfPages = parseInt(value, 10);
         break;
+      case 'estimation':
+        if (value === 'non coté') {
+          this.estimationEuros = null;
+        }
+        else {
+          // 'de 10 à 15 euros'
+          let arr = value.split(' à ');
+          let min = arr[0].split(' ')[1];
+          let max = arr[1].split(' ')[0];
+          this.estimationEuros = [parseInt(min), parseInt(max)];
+        }
       default:
         break;
     }

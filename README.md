@@ -112,6 +112,7 @@ Response body
       "date": 1104534000,
       "editor": "Albin Michel",
       "nbrOfPages": 62,
+      "estimationEuros" : [20, 25],
       "imageCoverWidth": 650,
       "imageCoverHeight": 863
     },
@@ -132,6 +133,7 @@ Response body
       "date": 1220220000,
       "editor": "Glénat",
       "nbrOfPages": 62,
+      "estimationEuros" : null,
       "imageCoverWidth": 400,
       "imageCoverHeight": 533 
     },
@@ -151,6 +153,7 @@ Response body
       "colors": "Ruby",
       "date": 1356994800,
       "editor": "Glénat",
+      "estimationEuros" : null,
       "nbrOfPages": 62,
       "imageCoverWidth": 500,
       "imageCoverHeight": 666
