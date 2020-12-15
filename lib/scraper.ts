@@ -10,7 +10,7 @@ export class Scraper {
 
     return $('.nav-liste li')
       .filter((index, element) => ($(element).find('img').attr('src').includes('France')))
-      .map((index, element) => $(element).find('a').attr('href').replace('.html', '__10000.html'))
+      .map((index, element) => $(element).find('a').attr('href'))
       .get();
   }
 
@@ -23,6 +23,7 @@ export class Scraper {
   }
 
   static async getSerie(url: string, proxy: Proxy = null) {
+    url = url.replace('.html', '__10000.html') // in order to get all the albums.
     const $ = await Utils.requestWithProxy(url, proxy);
 
     const serie = new Serie($);
