@@ -124,11 +124,11 @@ export class Album {
         this.nbrOfPages = parseInt(value, 10);
         break;
       case 'estimation':
-        let arr = value.match(/([\d]+) à (\d+)/);
+        let arr = value.match(/(\d+) à (\d+)/);
         if (arr) {
           this.estimationEuros = [parseInt(arr[1]), parseInt(arr[2])];
         } else {
-          arr = value.match(/^Moins de (\d+).*$/)
+          arr = value.match(/Moins de (\d+)/)
           if (arr) {
             this.estimationEuros = [parseInt(arr[1])];
           } else {
