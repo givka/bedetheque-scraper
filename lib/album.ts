@@ -124,15 +124,16 @@ export class Album {
         this.nbrOfPages = parseInt(value, 10);
         break;
       case 'estimation':
-        if (value === 'non coté') {
-          this.estimationEuros = null;
-        }
-        else {
-          // 'de 10 à 15 euros'
-          let arr = value.split(' à ');
-          let min = arr[0].split(' ')[1];
-          let max = arr[1].split(' ')[0];
-          this.estimationEuros = [parseInt(min), parseInt(max)];
+        let arr = value.match(/([\d]+) à (\d+)/);
+        if (arr) {
+          this.estimationEuros = [parseInt(arr[1]), parseInt(arr[2])];
+        } else {
+          arr = value.match(/^Moins de (\d+).*$/)
+          if (arr) {
+            this.estimationEuros = [parseInt(arr[1])];
+          } else {
+            this.estimationEuros = null;
+          }
         }
       default:
         break;
