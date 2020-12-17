@@ -1,8 +1,6 @@
 # bedetheque-scraper
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Dependency Status][david-image]][david-url]
-[![devDependency Status][david-dev-image]][david-dev-url]
 
 NodeJS script to scrap the entire database of [bdgest.com](https://www.bdgest.com/) / [bedetheque.com](https://www.bedetheque.com/). (approx. 40.000+ series, 260.000+ albums)
 
@@ -214,9 +212,5 @@ public image: string | null;
 
 [npm-image]: https://img.shields.io/npm/v/bedetheque-scraper.svg
 [npm-url]: https://npmjs.com/package/bedetheque-scraper
-[david-dev-image]: https://david-dm.org/givka/bedetheque-scraper/dev-status.svg
-[david-dev-url]: https://david-dm.org/givka/bedetheque-scraper?type=dev
-[david-image]: https://david-dm.org/givka/bedetheque-scraper.svg
-[david-url]: https://david-dm.org/givka/bedetheque-scraper
 [downloads-image]: https://img.shields.io/npm/dm/bedetheque-scraper.svg
 [downloads-url]: https://npmjs.org/package/bedetheque-scraper
