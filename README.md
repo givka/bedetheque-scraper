@@ -70,7 +70,7 @@ Response body:
 ```
 ### Serie
 ```ts
-Scraper.getSerie(url: string, proxy?: Proxy): Promise<{serie, albums}>;
+Scraper.getSerie(url: string, proxy?: Proxy): Promise<{serie: Serie, albums: Album[]>;
 ```
 #### Example
 `url = https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html`
