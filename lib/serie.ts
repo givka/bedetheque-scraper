@@ -1,15 +1,15 @@
-import {Album} from './album';
-import {Utils} from './utils';
+import { Album } from './album';
+import { Utils } from './utils';
 
 export class Serie {
   serieId: number;
   serieTitle: string;
   serieUrl: string;
   numberOfAlbums: number;
-  serieCover!:  { small: string | null, large: string | null };
-  albumsId!: number[];
-  voteAverage!: number;
-  voteCount!: number;
+  serieCover: { small: string, large: string };
+  albumsId: number[];
+  voteAverage: number;
+  voteCount: number;
   recommendationsId: number[];
   dateBegin: number;
   dateEnd: number;

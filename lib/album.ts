@@ -7,19 +7,19 @@ export class Album {
   public albumId: number;
   public albumNumber: number;
   public serieTitle: string;
-  public serieUrl: string | null;
-  public albumTitle: string | null;
-  public albumUrl: string | null;
-  public scenario!: string | null;
-  public drawing!: string | null;
-  public colors!: string | null;
-  public date!: number;
-  public editor!: string | null;
-  public estimationEuros!: number[] | null
-  public nbrOfPages!: number | null;
-  public imageCover: { small: string | null, large: string | null };
-  public imageExtract: { small: string | null, large: string | null };
-  public imageReverse: { small: string | null, large: string | null };
+  public serieUrl: string;
+  public albumTitle: string;
+  public albumUrl: string;
+  public scenario: string;
+  public drawing: string;
+  public colors: string;
+  public date: number;
+  public editor: string;
+  public estimationEuros: number[]
+  public nbrOfPages: number;
+  public imageCover: { small: string, large: string };
+  public imageExtract: { small: string, large: string };
+  public imageReverse: { small: string, large: string };
   public voteAverage: number; // voteAverage /100
   public voteCount: number;
 
@@ -114,11 +114,7 @@ export class Album {
           this.estimationEuros = [parseInt(arr[1]), parseInt(arr[2])];
         } else {
           arr = value.match(/Moins de (\d+)/)
-          if (arr) {
-            this.estimationEuros = [parseInt(arr[1])];
-          } else {
-            this.estimationEuros = null;
-          }
+          this.estimationEuros = arr ? [parseInt(arr[1])] : [];
         }
       default:
         break;

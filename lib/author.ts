@@ -1,12 +1,11 @@
 import { Utils } from './utils';
 
-// image: https://www.bedetheque.com/media/Photos/${image}
 export class Author {
-  authorId: number | null;
-  image: string | null;
+  authorId: number;
+  image: string;
   name: string;
-  birthDate: string | null;
-  deathDate: string | null;
+  birthDate: string;
+  deathDate: string;
   seriesIdScenario: number[];
   seriesIdDrawing: number[];
   seriesIdBoth: number[];
