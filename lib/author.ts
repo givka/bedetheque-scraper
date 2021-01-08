@@ -1,4 +1,4 @@
-import {Utils} from './utils';
+import { Utils } from './utils';
 
 // image: https://www.bedetheque.com/media/Photos/${image}
 export class Author {
@@ -39,10 +39,7 @@ export class Author {
 
   private static getImage($: CheerioStatic) {
     const image = $('.auteur-image img').attr('src');
-    if (!image) return null;
-    return image !== 'https://www.bdgest.com/skin/nophoto.png'
-      ? image.replace('https://www.bedetheque.com/media/Photos/', '')
-      : null;
+    return image && image !== 'https://www.bdgest.com/skin/nophoto.png' ? image : null;
   }
 
   private getSeriesId($: CheerioStatic, series: Cheerio, isScen: boolean, isDraw: boolean) {

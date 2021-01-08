@@ -5,7 +5,7 @@ export class Serie {
   serieId: number;
   serieTitle: string;
   numberOfAlbums: number;
-  serieCover!: string | null;
+  serieCover!:  { small: string | null, large: string | null };
   albumsId!: number[];
   voteAverage!: number;
   voteCount!: number;

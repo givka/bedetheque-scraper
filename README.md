@@ -78,77 +78,107 @@ Scraper.getSerie(url: string, proxy?: Proxy): Promise<{serie: Serie, albums: Alb
 Response body
 ```json
 {
-  "serie": {
-    "serieId": 10739,
-    "serieTitle": "Le roi des mouches",
-    "numberOfAlbums": 3,
-    "albumsId": [ 42297, 77882, 178960 ],
-    "recommendationsId": [ 3633, 51397, 326, 13687, 14319, 31517, 24640 ],
-    "voteAverage": 87,
-    "voteCount": 202,
-    "serieCover": "Couv_42297.jpg",
-    "dateBegin": 1104534000,
-    "dateEnd": 1356994800 
-  },
-  "albums": [
-    {
-      "serieId": 10739,
-      "serieTitle": "Le roi des mouches",
-      "albumNumber": 1,
-      "albumId": 42297,
-      "albumTitle": "Hallorave",
-      "imageCover": "Couv_42297.jpg",
-      "imageExtract": "roidesmouches01p.jpg",
-      "imageReverse": "Verso_42297.jpg",
-      "voteAverage": 88,
-      "voteCount": 65,
-      "scenario": "Pirus, Michel",
-      "drawing": "Mezzo",
-      "colors": "Ruby",
-      "date": 1104534000,
-      "editor": "Albin Michel",
-      "nbrOfPages": 62,
-      "estimationEuros" : [20, 25]
+    "serie": {
+        "serieId": 10739,
+        "serieTitle": "Le roi des mouches",
+        "numberOfAlbums": 3,
+        "recommendationsId": [ 3633, 51397, 326, 13687, 14319, 31517, 24640 ],
+        "albumsId": [ 42297, 77882, 178960 ],
+        "voteAverage": 87.4,
+        "voteCount": 219,
+        "serieCover": {
+            "small": "https://www.bedetheque.com/cache/thb_couv/Couv_42297.jpg",
+            "large": "https://www.bedetheque.com/media/Couvertures/Couv_42297.jpg"
+        },
+        "dateBegin": 1104534000,
+        "dateEnd": 1356994800
     },
-    {
-      "serieId": 10739,
-      "serieTitle": "Le roi des mouches",
-      "albumNumber": 2,
-      "albumId": 77882,
-      "albumTitle": "L'origine du monde",
-      "imageCover": "RoiDesMouchesLe2_18092008_213101.jpg",
-      "imageExtract": "AlbroiDesMouchesLe2_18092008_213101.jpg",
-      "imageReverse": "roidesmouches02v_77882.jpg",
-      "voteAverage": 86,
-      "voteCount": 100,
-      "scenario": "Pirus, Michel",
-      "drawing": "Mezzo",
-      "colors": "Ruby",
-      "date": 1220220000,
-      "editor": "Glénat",
-      "nbrOfPages": 62,
-      "estimationEuros" : null
-    },
-    {
-      "serieId": 10739,
-      "serieTitle": "Le roi des mouches",
-      "albumNumber": 3,
-      "albumId": 178960,
-      "albumTitle": "Sourire suivant",
-      "imageCover": "178960_c.jpg",
-      "imageExtract": "178960_pla.jpg",
-      "imageReverse": "Verso_178960.jpg",
-      "voteAverage": 88,
-      "voteCount": 37,
-      "scenario": "Pirus, Michel",
-      "drawing": "Mezzo",
-      "colors": "Ruby",
-      "date": 1356994800,
-      "editor": "Glénat",
-      "estimationEuros" : null,
-      "nbrOfPages": 62
-    }
-  ]
+    "albums": [
+        {
+            "serieId": 10739,
+            "serieTitle": "Le roi des mouches",
+            "albumNumber": 1,
+            "albumId": 42297,
+            "albumTitle": "Hallorave",
+            "imageCover": {
+                "small": "https://www.bedetheque.com/cache/thb_couv/Couv_42297.jpg",
+                "large": "https://www.bedetheque.com/media/Couvertures/Couv_42297.jpg"
+            },
+            "imageExtract": {
+                "small": "https://www.bedetheque.com/cache/thb_planches/roidesmouches01p.jpg",
+                "large": "https://www.bedetheque.com/media/Planches/roidesmouches01p.jpg"
+            },
+            "imageReverse": {
+                "small": "https://www.bedetheque.com/cache/thb_versos/Verso_42297.jpg",
+                "large": "https://www.bedetheque.com/media/Versos/Verso_42297.jpg"
+            },
+            "voteAverage": 88,
+            "voteCount": 72,
+            "scenario": "Pirus, Michel",
+            "drawing": "Mezzo",
+            "colors": "Ruby",
+            "date": 1104534000,
+            "estimationEuros": [ 20, 25 ],
+            "editor": "Albin Michel",
+            "nbrOfPages": 62
+        },
+        {
+            "serieId": 10739,
+            "serieTitle": "Le roi des mouches",
+            "albumNumber": 2,
+            "albumId": 77882,
+            "albumTitle": "L'origine du monde",
+            "imageCover": {
+                "small": "https://www.bedetheque.com/cache/thb_couv/RoiDesMouchesLe2_18092008_213101.jpg",
+                "large": "https://www.bedetheque.com/media/Couvertures/RoiDesMouchesLe2_18092008_213101.jpg"
+            },
+            "imageExtract": {
+                "small": "https://www.bedetheque.com/cache/thb_planches/AlbroiDesMouchesLe2_18092008_213101.jpg",
+                "large": "https://www.bedetheque.com/media/Planches/AlbroiDesMouchesLe2_18092008_213101.jpg"
+            },
+            "imageReverse": {
+                "small": "https://www.bedetheque.com/cache/thb_versos/roidesmouches02v_77882.jpg",
+                "large": "https://www.bedetheque.com/media/Versos/roidesmouches02v_77882.jpg"
+            },
+            "voteAverage": 86,
+            "voteCount": 105,
+            "scenario": "Pirus, Michel",
+            "drawing": "Mezzo",
+            "colors": "Ruby",
+            "date": 1220220000,
+            "estimationEuros": null,
+            "editor": "Glénat",
+            "nbrOfPages": 62
+        },
+        {
+            "serieId": 10739,
+            "serieTitle": "Le roi des mouches",
+            "albumNumber": 3,
+            "albumId": 178960,
+            "albumTitle": "Sourire suivant",
+            "imageCover": {
+                "small": "https://www.bedetheque.com/cache/thb_couv/178960_c.jpg",
+                "large": "https://www.bedetheque.com/media/Couvertures/178960_c.jpg"
+            },
+            "imageExtract": {
+                "small": "https://www.bedetheque.com/cache/thb_planches/178960_pla.jpg",
+                "large": "https://www.bedetheque.com/media/Planches/178960_pla.jpg"
+            },
+            "imageReverse": {
+                "small": "https://www.bedetheque.com/cache/thb_versos/Verso_178960.jpg",
+                "large": "https://www.bedetheque.com/media/Versos/Verso_178960.jpg"
+            },
+            "voteAverage": 90,
+            "voteCount": 42,
+            "scenario": "Pirus, Michel",
+            "drawing": "Mezzo",
+            "colors": "Ruby",
+            "date": 1356994800,
+            "estimationEuros": null,
+            "editor": "Glénat",
+            "nbrOfPages": 62
+        }
+    ]
 }
 ```
 ### Author
@@ -161,46 +191,19 @@ Scraper.getAuthor(url: string, proxy?: Proxy): Promise<Author>;
 Response body:
 ```json
 {
-  "authorId": 232,
-  "name": "Blain, Christophe",
-  "image": "Photo_232.jpg",
-  "birthDate": "10/08/1970",
-  "deathDate": null,
-  "seriesIdScenario": [],
-  "seriesIdDrawing": [ 55755, 3168, 2325, 1358, 10330, 1994 ],
-  "seriesIdBoth": [ 27589, 38023, 14662, 517, 24260, 3898 ]
+    "authorId": 232,
+    "name": "Blain, Christophe",
+    "image": "https://www.bedetheque.com/media/Photos/Photo_232.jpg",
+    "birthDate": "10/08/1970",
+    "deathDate": null,
+    "seriesIdBoth": [ 67863, 27589, 38023, 14662, 517, 24260, 3898 ],
+    "seriesIdScenario": [],
+    "seriesIdDrawing": [ 55755, 3168, 3125, 2325, 1358, 10330, 1994 ]
 }
-```
-
-## Image Sizes
-### Serie
-```typescript
-// serieCoverLarge: https://www.bedetheque.com/media/Couvertures/${serieCover}
-// serieCoverSmall: https://www.bedetheque.com/cache/thb_couv/${serieCover}
-public serieCover: string | null;
-```
-### Album
-```typescript
-// imageCoverLarge: https://www.bedetheque.com/media/Couvertures/${imageCover}
-// imageCoverSmall: https://www.bedetheque.com/cache/thb_couv/${imageCover}
-public imageCover: string | null;
-
-// imageExtractLarge: https://www.bedetheque.com/media/Planches/${imageExtract}
-// imageExtractSmall: https://www.bedetheque.com/cache/thb_planches/${imageExtract}
-public imageExtract: string | null;
-
-// imageReverseLarge: https://www.bedetheque.com/media/Versos/${imageReverse}
-// imageReverseSmall: https://www.bedetheque.com/cache/thb_versos/${imageReverse}
-public imageReverse: string | null;
-```
-### Author
-```typescript
-// imageLarge: https://www.bedetheque.com/media/Photos/${image}
-public image: string | null;
 ```
 ## License
 
-  [MIT](LICENSE)
+[MIT](LICENSE)
 
 [npm-image]: https://img.shields.io/npm/v/bedetheque-scraper.svg
 [npm-url]: https://npmjs.com/package/bedetheque-scraper

@@ -1,11 +1,4 @@
-// imageCoverLarge: https://www.bedetheque.com/media/Couvertures/${imageCover}
-// imageCoverSmall: https://www.bedetheque.com/cache/thb_couv/${imageCover}
-// imageExtractLarge: https://www.bedetheque.com/media/Planches/${imageExtract}
-// imageExtractSmall: https://www.bedetheque.com/cache/thb_planches/${imageExtract}
-// imageReverseLarge: https://www.bedetheque.com/media/Versos/${imageReverse}
-// imageReverseSmall: https://www.bedetheque.com/cache/thb_versos/${imageReverse}
-
-import {Serie} from './serie';
+import { Serie } from './serie';
 
 const moment = require('moment');
 
@@ -22,9 +15,9 @@ export class Album {
   public editor!: string | null;
   public estimationEuros!: number[] | null
   public nbrOfPages!: number | null;
-  public imageCover: string | null;
-  public imageExtract: string | null;
-  public imageReverse: string | null;
+  public imageCover: { small: string | null, large: string | null };
+  public imageExtract: { small: string | null, large: string | null };
+  public imageReverse: { small: string | null, large: string | null };
 
   // voteAverage /100
   public voteAverage: number;
@@ -36,7 +29,7 @@ export class Album {
     this.albumNumber = Album.findAlbumNumber(page);
     this.albumId = parseInt(page.children().first().attr('name'), 10);
     this.albumTitle = page.find('.album-main .titre').attr('title');
-    this.imageCover = Album.findCover(page);
+    this.imageCover = Album.findImage(page, 'browse-couvertures', 'Couvertures');
     this.imageExtract = Album.findImage(page, 'browse-planches', 'Planches');
     this.imageReverse = Album.findImage(page, 'browse-versos', 'Versos');
     this.voteAverage = Album.findVoteAverage(page, $);
@@ -65,18 +58,11 @@ export class Album {
     return parseInt(voteCount.match(/\(([0-9]+) vote/)![1], 10);
   }
 
-  private static findCover(page: Cheerio) {
-    const image = page.find('.couv .titre img').attr('src');
-    return image
-      ? image.replace('https://www.bedetheque.com/cache/thb_couv/', '')
-      : null;
-  }
-
   private static findImage(page: Cheerio, className: string, path: string) {
-    const image = page.find(`.sous-couv .${className}`).attr('href');
-    return image
-      ? image.replace(`https://www.bedetheque.com/media/${path}/`, '')
-      : null;
+    const elem = page.find(`.sous-couv .${className}`);
+    const large = elem.attr('href')
+    const small = elem.find('img').attr('src')
+    return { small: small ? small : null, large: large ? large : null }
   }
 
   private addDetails(page: Cheerio, $: CheerioStatic) {
