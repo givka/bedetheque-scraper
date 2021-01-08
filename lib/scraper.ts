@@ -36,10 +36,6 @@ export class Scraper {
 
   static async getAuthor(url: string, proxy: Proxy = null) {
     const $ = await Utils.requestWithProxy(url, proxy);
-
-    const author = new Author($);
-    await author.getImageDimensions();
-
-    return author;
+    return new Author($);
   }
 }

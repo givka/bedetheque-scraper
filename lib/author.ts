@@ -1,13 +1,9 @@
 import {Utils} from './utils';
 
-const probe = require('probe-image-size');
-
 // image: https://www.bedetheque.com/media/Photos/${image}
 export class Author {
   authorId: number | null;
   image: string | null;
-  imageWidth: number | null;
-  imageHeight: number | null;
   name: string;
   birthDate: string | null;
   deathDate: string | null;
@@ -61,17 +57,4 @@ export class Author {
       .map(url => Utils.urlToSerieID(url));
   }
 
-  async getImageDimensions() {
-    if (this.image == null) return;
-
-    return probe(`https://www.bedetheque.com/media/Photos/${this.image}`)
-      .then(dimension => {
-        this.imageWidth = dimension.width;
-        this.imageHeight = dimension.height;
-      })
-      .catch(() => {
-        // do nothing
-      });
-
-  }
 }

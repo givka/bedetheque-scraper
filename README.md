@@ -87,8 +87,6 @@ Response body
     "voteAverage": 87,
     "voteCount": 202,
     "serieCover": "Couv_42297.jpg",
-    "serieCoverWidth": 650,
-    "serieCoverHeight": 863,
     "dateBegin": 1104534000,
     "dateEnd": 1356994800 
   },
@@ -110,9 +108,7 @@ Response body
       "date": 1104534000,
       "editor": "Albin Michel",
       "nbrOfPages": 62,
-      "estimationEuros" : [20, 25],
-      "imageCoverWidth": 650,
-      "imageCoverHeight": 863
+      "estimationEuros" : [20, 25]
     },
     {
       "serieId": 10739,
@@ -131,9 +127,7 @@ Response body
       "date": 1220220000,
       "editor": "Glénat",
       "nbrOfPages": 62,
-      "estimationEuros" : null,
-      "imageCoverWidth": 400,
-      "imageCoverHeight": 533 
+      "estimationEuros" : null
     },
     {
       "serieId": 10739,
@@ -152,9 +146,7 @@ Response body
       "date": 1356994800,
       "editor": "Glénat",
       "estimationEuros" : null,
-      "nbrOfPages": 62,
-      "imageCoverWidth": 500,
-      "imageCoverHeight": 666
+      "nbrOfPages": 62
     }
   ]
 }

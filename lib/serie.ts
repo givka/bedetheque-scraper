@@ -6,8 +6,6 @@ export class Serie {
   serieTitle: string;
   numberOfAlbums: number;
   serieCover!: string | null;
-  serieCoverWidth: number | null;
-  serieCoverHeight: number | null;
   albumsId!: number[];
   voteAverage!: number;
   voteCount!: number;
@@ -28,14 +26,9 @@ export class Serie {
     this.albumsId = albums.map(album => album.albumId);
     [this.voteAverage, this.voteCount] = this.getVoteAverage(albums);
 
-    await Promise.all(albums.map(a => a.getImageDimensions()));
-
     if (albums.length == 0) return;
 
     this.serieCover = albums[0].imageCover;
-    this.serieCoverWidth = albums[0].imageCoverWidth;
-    this.serieCoverHeight = albums[0].imageCoverHeight;
-
     this.dateBegin = albums[0].date;
     this.dateEnd = albums[albums.length - 1].date;
   }

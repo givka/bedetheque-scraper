@@ -8,7 +8,6 @@
 import {Serie} from './serie';
 
 const moment = require('moment');
-const probe = require('probe-image-size');
 
 export class Album {
   public serieId: number;
@@ -24,8 +23,6 @@ export class Album {
   public estimationEuros!: number[] | null
   public nbrOfPages!: number | null;
   public imageCover: string | null;
-  public imageCoverWidth: number | null;
-  public imageCoverHeight: number | null;
   public imageExtract: string | null;
   public imageReverse: string | null;
 
@@ -138,19 +135,6 @@ export class Album {
       default:
         break;
     }
-  }
-
-  getImageDimensions() {
-    if (this.imageCover == null) return;
-
-    return probe(`https://www.bedetheque.com/media/Couvertures/${this.imageCover}`)
-      .then((dimension: any) => {
-        this.imageCoverWidth = dimension.width;
-        this.imageCoverHeight = dimension.height;
-      })
-      .catch(() => {
-        // do nothing
-      });
   }
 
   static formatAlbumsFromSerie($: CheerioStatic, serie: Serie) {
