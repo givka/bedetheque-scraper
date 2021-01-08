@@ -23,10 +23,10 @@ export class Scraper {
   }
 
   static async getSerie(url: string, proxy: Proxy = null) {
-    url = url.replace('.html', '__10000.html') // in order to get all the albums.
-    const $ = await Utils.requestWithProxy(url, proxy);
+    const allAlbumsUrl = url.replace('.html', '__10000.html') // in order to get all the albums.
+    const $ = await Utils.requestWithProxy(allAlbumsUrl, proxy);
 
-    const serie = new Serie($);
+    const serie = new Serie($, url);
 
     const albums = Album.formatAlbumsFromSerie($, serie);
     await serie.addAlbumsInfo(albums);

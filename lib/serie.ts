@@ -4,6 +4,7 @@ import {Utils} from './utils';
 export class Serie {
   serieId: number;
   serieTitle: string;
+  serieUrl: string;
   numberOfAlbums: number;
   serieCover!:  { small: string | null, large: string | null };
   albumsId!: number[];
@@ -13,9 +14,10 @@ export class Serie {
   dateBegin: number;
   dateEnd: number;
 
-  constructor($: CheerioStatic) {
+  constructor($: CheerioStatic, serieUrl: string) {
     this.serieId = parseInt($('.idbel').text(), 10);
     this.serieTitle = $('h1 a').text();
+    this.serieUrl = serieUrl;
 
     const match = $('.serie-info').text().match(/Tomes? :([0-9]+)/);
     this.numberOfAlbums = match ? parseInt(match[1], 10) : 0;

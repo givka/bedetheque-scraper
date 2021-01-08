@@ -7,7 +7,9 @@ export class Album {
   public albumId: number;
   public albumNumber: number;
   public serieTitle: string;
+  public serieUrl: string | null;
   public albumTitle: string | null;
+  public albumUrl: string | null;
   public scenario!: string | null;
   public drawing!: string | null;
   public colors!: string | null;
@@ -18,17 +20,17 @@ export class Album {
   public imageCover: { small: string | null, large: string | null };
   public imageExtract: { small: string | null, large: string | null };
   public imageReverse: { small: string | null, large: string | null };
-
-  // voteAverage /100
-  public voteAverage: number;
+  public voteAverage: number; // voteAverage /100
   public voteCount: number;
 
-  constructor(page: Cheerio, $: CheerioStatic, serieId: number, serieTitle: string) {
-    this.serieId = serieId;
-    this.serieTitle = serieTitle;
+  constructor(page: Cheerio, $: CheerioStatic, serie: Serie) {
+    this.serieId = serie.serieId;
+    this.serieTitle = serie.serieTitle;
+    this.serieUrl = serie.serieUrl;
     this.albumNumber = Album.findAlbumNumber(page);
     this.albumId = parseInt(page.children().first().attr('name'), 10);
     this.albumTitle = page.find('.album-main .titre').attr('title');
+    this.albumUrl = page.find('.album-main a').attr('href')
     this.imageCover = Album.findImage(page, 'browse-couvertures', 'Couvertures');
     this.imageExtract = Album.findImage(page, 'browse-planches', 'Planches');
     this.imageReverse = Album.findImage(page, 'browse-versos', 'Versos');
@@ -126,7 +128,7 @@ export class Album {
   static formatAlbumsFromSerie($: CheerioStatic, serie: Serie) {
     return $('.liste-albums > li')
       .filter((index, elem) => $(elem).find('.numa').text() === '')
-      .map((index, elem) => new Album($(elem), $, serie.serieId, serie.serieTitle))
+      .map((index, elem) => new Album($(elem), $, serie))
       .get() as unknown as Album[];
   }
 }
