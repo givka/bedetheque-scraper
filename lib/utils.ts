@@ -5,6 +5,7 @@ import * as cheerio from 'cheerio';
 export class Utils {
   static requestWithProxy(urlRaw: string, proxy: Proxy) {
     const url = encodeURI(urlRaw);
+    console.log("GET:", url)
     return Utils.promiseWithTimeout(axiosHttpsProxyFix.get(url, {proxy}), 60000)
       .then((result: AxiosResponse) => {
         const $ = cheerio.load(result.data);
