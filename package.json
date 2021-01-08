@@ -28,17 +28,11 @@
   },
   "dependencies": {
     "axios-https-proxy-fix": "^0.17.1",
-    "chalk": "^2.4.2",
     "cheerio": "^1.0.0-rc.2",
-    "fs-extra": "^7.0.0",
-    "lodash": "^4.17.20",
-    "moment": "^2.24.0",
-    "probe-image-size": "^5.0.0"
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.9",
-    "@types/fs-extra": "^5.0.4",
-    "@types/lodash": "^4.14.118",
     "@types/moment": "^2.13.0",
     "ts-node": "~7.0.0",
     "tslint": "^5.11.0",
