@@ -5,7 +5,7 @@ const moment = require('moment');
 export class Album {
   public serieId: number;
   public albumId: number;
-  public albumNumber: number;
+  public albumNum: string;
   public serieTitle: string;
   public serieUrl: string;
   public albumTitle: string;
@@ -27,7 +27,7 @@ export class Album {
     this.serieId = serie.serieId;
     this.serieTitle = serie.serieTitle;
     this.serieUrl = serie.serieUrl;
-    this.albumNumber = Album.findAlbumNumber(page);
+    this.albumNum = serie.numberOfAlbums === 1 ? 'One-shot' : page.find('.album-main .titre > span').text().split(".", 1)[0].trim();
     this.albumId = parseInt(page.children().first().attr('name'), 10);
     this.albumTitle = page.find('.album-main .titre').attr('title');
     this.albumUrl = page.find('.album-main a').attr('href')
@@ -37,11 +37,6 @@ export class Album {
     this.voteAverage = Album.findVoteAverage(page, $);
     this.voteCount = this.findVoteCount(page, $);
     this.addDetails(page, $);
-  }
-
-  private static findAlbumNumber(page: Cheerio) {
-    const match = page.find('.album-main .titre > span').text().match(/([0-9]+)/);
-    return parseInt(match && match[1] || '1', 10);
   }
 
   private static findVoteAverage(page: Cheerio, $: CheerioStatic) {
@@ -123,7 +118,7 @@ export class Album {
 
   static formatAlbumsFromSerie($: CheerioStatic, serie: Serie) {
     return $('.liste-albums > li')
-      .filter((index, elem) => $(elem).find('.numa').text() === '')
+      //.filter((index, elem) => $(elem).find('.numa').text() === '')
       .map((index, elem) => new Album($(elem), $, serie))
       .get() as unknown as Album[];
   }

@@ -62,7 +62,7 @@ Album
 {
   serieId: number;
   albumId: number;
-  albumNumber: number;
+  albumNum: string;
   serieTitle: string;
   serieUrl: string;
   albumTitle: string;
@@ -105,22 +105,32 @@ Proxy
 - ```ts 
   Scraper.getSeriesUrlFromLetter(letter: string, proxy?: Proxy): Promise<string[]>;
   ```
-  > `const serieUrls = await Scraper.getSeriesUrlFromLetter('A');`
-
+  - Example: 
+    ```ts
+    const serieUrls = await Scraper.getSeriesUrlFromLetter('A');
+    ```
 - ```ts
   Scraper.getAuthorsUrlFromLetter(letter: string, proxy?: Proxy): Promise<string[]>;
   ```
-  > `const authorUrls = await Scraper.getAuthorsUrlFromLetter('A');`
-
+  - Example:
+    ```ts
+    const authorUrls = await Scraper.getAuthorsUrlFromLetter('A');
+    ```
 - ```ts
   Scraper.getSerie(url: string, proxy?: Proxy): Promise<{serie: Serie, albums: Album[]>;
   ```
-  > `const {serie, albums} = await Scraper.getSerie('https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html')`
+  - Example:
+    ```ts
+    const {serie, albums} = await Scraper.getSerie('https://www.bedetheque.com/serie-10739-BD-Roi-des-mouches.html')
+    ```
 
 - ```ts
   Scraper.getAuthor(url: string, proxy?: Proxy): Promise<Author>;
   ```
-  > `const author = await Scraper.getAuthor('https://www.bedetheque.com/auteur-232-BD-Blain-Christophe.html')`
+  - Example:
+    ```ts
+    const author = await Scraper.getAuthor('https://www.bedetheque.com/auteur-232-BD-Blain-Christophe.html')
+    ```
 
 ## License
 
