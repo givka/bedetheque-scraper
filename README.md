@@ -103,7 +103,7 @@ Proxy
 ```
 ## Endpoints
 - ```ts 
-  Scraper.getSeriesUrlFromLetter(letter: string, proxy?: Proxy): Promise<string[]>;
+  Scraper.getSeriesUrlFromLetter(letter: string, frenchOnly?: boolean, proxy?: Proxy): Promise<string[]>;
   ```
   - Example: 
     ```ts

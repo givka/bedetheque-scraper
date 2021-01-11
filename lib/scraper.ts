@@ -1,15 +1,19 @@
-import {Proxy} from './proxy-fetcher';
-import {Utils} from './utils';
-import {Serie} from './serie';
-import {Album} from './album';
-import {Author} from './author';
+import { Proxy } from './proxy-fetcher';
+import { Utils } from './utils';
+import { Serie } from './serie';
+import { Album } from './album';
+import { Author } from './author';
 
 export class Scraper {
-  static async getSeriesUrlFromLetter(letter: string, proxy: Proxy = null): Promise<string[]> {
+  static async getSeriesUrlFromLetter(letter: string, frenchOnly = false, proxy: Proxy = null): Promise<string[]> {
     const $ = await Utils.requestWithProxy(`https://www.bedetheque.com/bandes_dessinees_${letter}.html`, proxy);
 
-    return $('.nav-liste li')
-      .filter((index, element) => ($(element).find('img').attr('src').includes('France')))
+    let list = $('.nav-liste li')
+    if (frenchOnly) {
+      list = list.filter((index, element) => ($(element).find('img').attr('src').includes('France')))
+    }
+    
+    return list
       .map((index, element) => $(element).find('a').attr('href'))
       .get();
   }
@@ -31,7 +35,7 @@ export class Scraper {
     const albums = Album.formatAlbumsFromSerie($, serie);
     await serie.addAlbumsInfo(albums);
 
-    return {serie, albums};
+    return { serie, albums };
   }
 
   static async getAuthor(url: string, proxy: Proxy = null) {
